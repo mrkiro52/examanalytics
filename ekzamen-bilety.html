@@ -1,0 +1,2704 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Экзаменационные билеты — Математика и ИТ</title>
+<style>
+:root{
+  --paper:#FBFAF6;
+  --paper2:#F0EDE4;
+  --line:#DBD5C6;
+  --ink:#191821;
+  --ink2:#55525F;
+  --blue:#2C3A8C;
+  --blue-soft:#E7E9F6;
+  --stamp:#A0342C;
+  --olive:#4F6046;
+  --code-bg:#F4F2EC;
+  --shadow:0 1px 0 rgba(25,24,33,.06), 0 8px 24px -18px rgba(25,24,33,.5);
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+  --sans:ui-sans-serif,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+}
+html[data-theme="dark"]{
+  --paper:#14141A;
+  --paper2:#1C1C24;
+  --line:#31313D;
+  --ink:#E8E6E0;
+  --ink2:#9A98A4;
+  --blue:#9AA6F0;
+  --blue-soft:#232640;
+  --stamp:#E08279;
+  --olive:#9DBA8E;
+  --code-bg:#1A1A22;
+  --shadow:0 1px 0 rgba(0,0,0,.4), 0 8px 24px -18px #000;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--serif);
+  font-size:17px;
+  line-height:1.62;
+  -webkit-text-size-adjust:100%;
+}
+
+/* ---------- Шапка ---------- */
+header{
+  position:sticky;top:0;z-index:50;
+  background:color-mix(in srgb, var(--paper) 92%, transparent);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.bar{max-width:1240px;margin:0 auto;padding:10px 20px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.brand{display:flex;flex-direction:column;line-height:1.1;margin-right:auto}
+.brand b{font-size:19px;letter-spacing:.2px;font-weight:600}
+.brand span{font-family:var(--sans);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2)}
+.blocks{display:flex;background:var(--paper2);border:1px solid var(--line);border-radius:999px;padding:3px}
+.blocks button{
+  font-family:var(--sans);font-size:13px;font-weight:600;
+  border:0;background:transparent;color:var(--ink2);
+  padding:7px 15px;border-radius:999px;cursor:pointer;white-space:nowrap;
+}
+.blocks button[aria-selected="true"]{background:var(--paper);color:var(--ink);box-shadow:var(--shadow)}
+#q{
+  font-family:var(--sans);font-size:14px;
+  border:1px solid var(--line);background:var(--paper2);color:var(--ink);
+  border-radius:999px;padding:8px 15px;width:210px;outline:0;
+}
+#q:focus{border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-soft)}
+.icons{display:flex;gap:6px}
+.icons button{
+  font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer;
+  border:1px solid var(--line);background:var(--paper2);color:var(--ink2);
+  border-radius:9px;padding:8px 11px;
+}
+.icons button:hover{color:var(--ink);border-color:var(--ink2)}
+.progress{height:2px;background:var(--line)}
+.progress i{display:block;height:100%;width:0;background:var(--blue);transition:width .3s ease}
+
+/* ---------- Раскладка ---------- */
+.wrap{max-width:1240px;margin:0 auto;padding:22px 20px 80px;display:grid;grid-template-columns:270px 1fr;gap:34px;align-items:start}
+nav{position:sticky;top:78px;max-height:calc(100vh - 100px);overflow:auto;padding-right:6px}
+.navhead{font-family:var(--sans);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);margin:0 0 10px;display:flex;justify-content:space-between}
+.tickets{display:flex;flex-direction:column;gap:4px}
+.tk{
+  display:flex;gap:11px;align-items:flex-start;text-align:left;width:100%;
+  border:1px solid transparent;background:transparent;color:var(--ink);
+  border-radius:10px;padding:8px 10px;cursor:pointer;font-family:var(--sans);font-size:13.5px;line-height:1.35;
+}
+.tk:hover{background:var(--paper2)}
+.tk .num{
+  flex:0 0 26px;height:26px;border-radius:50%;border:1px solid var(--line);
+  display:grid;place-items:center;font-size:12px;font-weight:700;color:var(--ink2);background:var(--paper);
+}
+.tk[aria-current="true"]{background:var(--blue-soft);border-color:color-mix(in srgb,var(--blue) 30%,transparent)}
+.tk[aria-current="true"] .num{border-color:var(--blue);color:var(--blue)}
+.tk.done .num{background:var(--blue);border-color:var(--blue);color:#fff}
+.tk.done .num::after{content:"✓"}
+.tk.done .num span{display:none}
+
+/* ---------- Карточка билета ---------- */
+main{min-width:0}
+article{
+  background:var(--paper);border:1px solid var(--line);border-radius:14px;
+  padding:34px 38px 40px;box-shadow:var(--shadow);position:relative;overflow:hidden;
+}
+article::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--blue);opacity:.85}
+.stamp{
+  position:absolute;right:26px;top:22px;
+  width:78px;height:78px;border:2px solid var(--stamp);border-radius:50%;
+  display:grid;place-items:center;transform:rotate(-9deg);opacity:.5;pointer-events:none;
+}
+.stamp b{font-family:var(--sans);font-size:26px;color:var(--stamp);line-height:1}
+.stamp i{position:absolute;bottom:11px;font-family:var(--sans);font-style:normal;font-size:7.5px;letter-spacing:.12em;color:var(--stamp)}
+.eyebrow{font-family:var(--sans);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);margin:0 0 6px}
+h1{font-size:29px;line-height:1.22;margin:0 0 4px;font-weight:600;max-width:min(100%,42ch);letter-spacing:-.01em}
+.src{font-family:var(--sans);font-size:12.5px;color:var(--ink2);margin:0 0 22px}
+article h3{font-size:14px;font-family:var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--blue);margin:30px 0 10px;font-weight:700}
+article h4{font-size:17px;margin:22px 0 6px;font-weight:600}
+article p{margin:0 0 11px}
+article ul,article ol{margin:0 0 12px;padding-left:22px}
+article li{margin:0 0 5px}
+b,strong{font-weight:600}
+.f{
+  font-family:var(--serif);font-size:17.5px;background:var(--paper2);
+  border-left:3px solid var(--line);border-radius:0 8px 8px 0;
+  padding:9px 15px;margin:10px 0;overflow-x:auto;white-space:nowrap;
+}
+.def,.thm,.note{border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin:12px 0;background:var(--paper2)}
+.def{border-left:3px solid var(--blue)}
+.thm{border-left:3px solid var(--olive)}
+.note{border-left:3px solid var(--stamp)}
+.def b:first-child,.thm b:first-child,.note b:first-child{font-family:var(--sans);font-size:12px;letter-spacing:.1em;text-transform:uppercase}
+.def b:first-child{color:var(--blue)}
+.thm b:first-child{color:var(--olive)}
+.note b:first-child{color:var(--stamp)}
+pre{background:var(--code-bg);border:1px solid var(--line);border-radius:10px;padding:14px 16px;overflow-x:auto;margin:12px 0}
+code{font-family:var(--mono);font-size:13.5px;line-height:1.55}
+p code,li code,td code{background:var(--paper2);border:1px solid var(--line);border-radius:5px;padding:.5px 5px;font-size:13px}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-family:var(--sans);font-size:14px}
+th,td{border:1px solid var(--line);padding:7px 11px;text-align:left;vertical-align:top}
+th{background:var(--paper2);font-weight:600;font-size:12.5px;letter-spacing:.03em}
+.kv{font-family:var(--mono);font-size:13px}
+.foot{display:flex;gap:10px;align-items:center;margin-top:30px;padding-top:20px;border-top:1px solid var(--line);flex-wrap:wrap}
+.foot button{font-family:var(--sans);font-size:13.5px;font-weight:600;cursor:pointer;border:1px solid var(--line);background:var(--paper2);color:var(--ink);border-radius:9px;padding:9px 15px}
+.foot button:hover{border-color:var(--ink2)}
+.foot .mark{margin-left:auto;border-color:var(--blue);color:var(--blue)}
+.foot .mark.on{background:var(--blue);color:#fff}
+.empty{font-family:var(--sans);color:var(--ink2);padding:40px 0;text-align:center}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+::selection{background:var(--blue-soft)}
+
+@media (max-width:900px){
+  .wrap{grid-template-columns:1fr;gap:16px;padding:14px 12px 60px}
+  nav{position:static;max-height:none}
+  .tickets{flex-direction:row;flex-wrap:wrap;gap:6px}
+  .tk{width:auto;padding:6px 9px}
+  .tk .lbl{display:none}
+  article{padding:24px 18px 30px;border-radius:12px}
+  h1{font-size:23px}
+  .stamp{display:none}
+  #q{width:100%;order:9}
+  .brand{margin-right:0}
+}
+@media print{
+  header,nav,.foot,.stamp{display:none}
+  .wrap{display:block;max-width:none;padding:0}
+  article{border:0;box-shadow:none;padding:0}
+  body{font-size:11pt}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="bar">
+    <div class="brand"><b>Экзаменационные билеты</b><span>Математика · Информационные технологии</span></div>
+    <div class="blocks" role="tablist">
+      <button role="tab" id="b1" aria-selected="true">Блок 1 · Математика</button>
+      <button role="tab" id="b2" aria-selected="false">Блок 2 · ИТ</button>
+    </div>
+    <input id="q" type="search" placeholder="Поиск по билетам…" autocomplete="off">
+    <div class="icons">
+      <button id="theme" title="Сменить тему">◐</button>
+      <button id="print" title="Печать / PDF">⎙</button>
+    </div>
+  </div>
+  <div class="progress"><i id="pbar"></i></div>
+</header>
+
+<div class="wrap">
+  <nav>
+    <div class="navhead"><span id="navtitle">Блок 1 · Математика</span><span id="navcount"></span></div>
+    <div class="tickets" id="list"></div>
+  </nav>
+  <main id="main"></main>
+</div>
+
+<script>
+const T = [];
+
+/* ==================== БЛОК 1 — МАТЕМАТИКА ==================== */
+
+T.push({b:1,n:1,t:"Линейное пространство. Базис и размерность. Замена базиса",
+s:"А. Г. Курош. Курс высшей алгебры",
+h:`
+<h3>Определение</h3>
+<div class="def"><b>Определение.</b> Множество V над полем P — <b>линейное (векторное) пространство</b>, если заданы сложение V×V→V и умножение на скаляр P×V→V, удовлетворяющие 8 аксиомам: коммутативность и ассоциативность сложения, существование 0 и противоположного −x, 1·x = x, α(βx) = (αβ)x, (α+β)x = αx+βx, α(x+y) = αx+αy.</div>
+<p>Примеры: ℝⁿ, матрицы M<sub>m×n</sub>, многочлены P<sub>n</sub>[x], непрерывные функции C[a,b], решения ОЛУ.</p>
+
+<h3>Линейная зависимость</h3>
+<div class="def"><b>Определение.</b> Система a₁,…,a<sub>k</sub> <b>линейно зависима</b>, если существуют α₁,…,α<sub>k</sub>, не все нули, такие что</div>
+<div class="f">α₁a₁ + α₂a₂ + … + α<sub>k</sub>a<sub>k</sub> = 0</div>
+<p>Иначе — <b>линейно независима</b> (ЛНЗ): равенство нулю возможно только при всех α<sub>i</sub> = 0.</p>
+<ul>
+<li>Система ЛЗ ⟺ хотя бы один вектор — линейная комбинация остальных.</li>
+<li>Любая система, содержащая 0, — ЛЗ. Подсистема ЛНЗ системы ЛНЗ.</li>
+<li><b>Основная лемма о ЛЗ:</b> если каждый из векторов b₁,…,b<sub>m</sub> линейно выражается через a₁,…,a<sub>k</sub> и m &gt; k, то b-система ЛЗ.</li>
+</ul>
+
+<h3>Базис и размерность</h3>
+<div class="def"><b>Определение.</b> <b>Базис</b> — упорядоченная ЛНЗ система, через которую линейно выражается любой вектор пространства (максимальная ЛНЗ система). <b>Размерность</b> dim V — число векторов базиса.</div>
+<div class="thm"><b>Теорема (связь).</b> Все базисы конечномерного пространства состоят из одного и того же числа векторов (следствие основной леммы). В n-мерном пространстве: любые n+1 векторов ЛЗ; любая ЛНЗ система из n векторов — базис; любую ЛНЗ систему можно дополнить до базиса.</div>
+<div class="thm"><b>Теорема (единственность разложения).</b> Координаты вектора в фиксированном базисе определены однозначно: если x = Σξ<sub>i</sub>e<sub>i</sub> = Σξ'<sub>i</sub>e<sub>i</sub>, то Σ(ξ<sub>i</sub>−ξ'<sub>i</sub>)e<sub>i</sub> = 0, а из ЛНЗ следует ξ<sub>i</sub> = ξ'<sub>i</sub>.</div>
+
+<h3>Замена базиса</h3>
+<p>Пусть e = (e₁,…,e<sub>n</sub>) — старый базис, f = (f₁,…,f<sub>n</sub>) — новый, причём</p>
+<div class="f">f<sub>j</sub> = Σ<sub>i</sub> t<sub>ij</sub> e<sub>i</sub>,  т.е.  (f₁ … f<sub>n</sub>) = (e₁ … e<sub>n</sub>)·T</div>
+<p><b>Матрица перехода</b> T = (t<sub>ij</sub>) — по столбцам записаны координаты новых базисных векторов в старом базисе. T всегда невырождена (det T ≠ 0), обратная матрица T⁻¹ — матрица обратного перехода.</p>
+<div class="thm"><b>Преобразование координат.</b> Если x имеет столбец координат X в базисе e и X' в базисе f, то <b>X = T·X'</b>, откуда <b>X' = T⁻¹X</b>. Базис меняется «прямо», координаты — обратно (контравариантность).</div>
+
+<h3>Код</h3>
+<pre><code>import numpy as np
+
+e = np.eye(3)                       # старый базис
+T = np.array([[1., 1., 0.],         # столбцы = новые векторы f_j в базисе e
+              [0., 1., 1.],
+              [1., 0., 1.]])
+
+X = np.array([3., 4., 5.])          # координаты x в старом базисе
+X_new = np.linalg.solve(T, X)       # X' = T^{-1} X
+print(X_new)                        # координаты в новом базисе
+print(np.allclose(T @ X_new, X))    # True: X = T X'
+
+# проверка независимости системы: rank == число векторов
+A = np.array([[1,2,3],[2,4,6],[1,0,1]], dtype=float)
+print(np.linalg.matrix_rank(A))     # 2 -> система ЛЗ</code></pre>
+`});
+
+T.push({b:1,n:2,t:"Матрицы. Ранг, ранг произведения. Определитель",
+s:"А. Г. Курош. Курс высшей алгебры",
+h:`
+<h3>Ранг матрицы</h3>
+<div class="def"><b>Определение.</b> <b>Ранг</b> rk A — максимальное число линейно независимых строк (строчный ранг) матрицы. Эквивалентно: наибольший порядок ненулевого минора (минорный ранг).</div>
+<div class="thm"><b>Теорема о ранге.</b> Строчный ранг = столбцовый ранг = минорный ранг. Отсюда сразу <b>rk Aᵀ = rk A</b>.</div>
+<p>Свойства: элементарные преобразования строк и столбцов не меняют ранг; rk A ≤ min(m,n); A обратима ⟺ rk A = n ⟺ det A ≠ 0.</p>
+
+<h3>Ранг произведения</h3>
+<div class="thm"><b>Теорема.</b> rk(AB) ≤ min(rk A, rk B). Причина: столбцы AB — линейные комбинации столбцов A, строки AB — линейные комбинации строк B.</div>
+<div class="thm"><b>Неравенство Сильвестра.</b> Для A (m×n), B (n×k): rk A + rk B − n ≤ rk(AB).</div>
+<p>Умножение на невырожденную матрицу ранг не меняет: rk(PAQ) = rk A при det P ≠ 0, det Q ≠ 0. Также rk(AᵀA) = rk A над ℝ.</p>
+
+<h3>Определитель</h3>
+<div class="def"><b>Определение.</b> det A = Σ<sub>σ∈S<sub>n</sub></sub> sgn(σ)·a<sub>1σ(1)</sub>…a<sub>nσ(n)</sub> — сумма n! слагаемых со знаком чётности подстановки.</div>
+<ul>
+<li>Полилинейность и кососимметричность по строкам (столбцам).</li>
+<li>Перестановка двух строк меняет знак; две одинаковые строки ⇒ det = 0.</li>
+<li>Прибавление строки, умноженной на число, к другой не меняет det.</li>
+<li>Разложение Лапласа по строке: det A = Σ<sub>j</sub> a<sub>ij</sub>A<sub>ij</sub>, A<sub>ij</sub> = (−1)<sup>i+j</sup>M<sub>ij</sub>.</li>
+<li>det Aᵀ = det A; det(αA) = αⁿ det A; det A⁻¹ = 1/det A.</li>
+</ul>
+<div class="thm"><b>Теорема (определитель произведения).</b> det(AB) = det A · det B для квадратных A, B одного порядка. Следствие: det(A⁻¹BA) = det B (подобие сохраняет определитель).</div>
+<div class="note"><b>Практика.</b> Вычисление по определению — O(n!); методом Гаусса (LU-разложение) — O(n³): det = произведение диагональных элементов U со знаком перестановок.</div>
+
+<h3>Код</h3>
+<pre><code>import numpy as np
+
+A = np.array([[2., 1., 0.],
+              [1., 3., 1.],
+              [0., 1., 2.]])
+B = np.random.rand(3, 3)
+
+print(np.linalg.matrix_rank(A))            # ранг
+print(np.linalg.matrix_rank(A.T) == np.linalg.matrix_rank(A))   # True
+
+print(np.isclose(np.linalg.det(A @ B),
+                 np.linalg.det(A) * np.linalg.det(B)))          # True
+
+# rk(AB) &lt;= min(rk A, rk B)
+C = np.array([[1., 2.], [2., 4.]])          # rk = 1
+D = np.random.rand(2, 5)
+print(np.linalg.matrix_rank(C @ D))         # 1</code></pre>
+`});
+
+T.push({b:1,n:3,t:"Евклидовы и унитарные пространства. Неравенство Коши — Буняковского",
+s:"А. Г. Курош. Курс высшей алгебры",
+h:`
+<h3>Скалярное произведение</h3>
+<div class="def"><b>Евклидово пространство</b> — вещественное ЛП со скалярным произведением (x,y) ∈ ℝ: <br>1) симметричность (x,y) = (y,x); 2) линейность по первому аргументу (αx+βz, y) = α(x,y)+β(z,y); 3) положительная определённость (x,x) ≥ 0, причём (x,x) = 0 ⟺ x = 0.</div>
+<div class="def"><b>Унитарное пространство</b> — комплексное ЛП с эрмитовым скалярным произведением: (x,y) = conj((y,x)) (эрмитова симметрия), линейность по первому аргументу и полуторалинейность: (x, αy) = conj(α)(x,y); (x,x) ≥ 0 вещественно.</div>
+<p>Примеры: (x,y) = Σx<sub>i</sub>y<sub>i</sub> в ℝⁿ; (x,y) = Σx<sub>i</sub>·conj(y<sub>i</sub>) в ℂⁿ; (f,g) = ∫<sub>a</sub><sup>b</sup> f(t)g(t)dt в C[a,b]; (A,B) = tr(ABᵀ) для матриц.</p>
+
+<h3>Неравенство Коши — Буняковского</h3>
+<div class="thm"><b>Теорема.</b> Для любых x, y:</div>
+<div class="f">|(x,y)|² ≤ (x,x)·(y,y),  т.е. |(x,y)| ≤ ‖x‖·‖y‖</div>
+<p>Равенство ⟺ x и y линейно зависимы.</p>
+<p><b>Доказательство (вещественный случай).</b> Рассмотрим φ(t) = (x + t y, x + t y) = (x,x) + 2t(x,y) + t²(y,y) ≥ 0 для всех t ∈ ℝ. Это квадратный трёхчлен относительно t, неотрицательный всюду, значит его дискриминант D = 4(x,y)² − 4(x,x)(y,y) ≤ 0, откуда (x,y)² ≤ (x,x)(y,y). Равенство D = 0 означает существование корня t₀, для которого x + t₀y = 0.</p>
+<div class="note"><b>Следствия.</b> Неравенство треугольника ‖x+y‖ ≤ ‖x‖+‖y‖; корректность определения угла cos φ = (x,y)/(‖x‖‖y‖) ∈ [−1,1]; неравенство |corr(X,Y)| ≤ 1 в теории вероятностей (там (X,Y) = E[XY]); интегральное неравенство (∫fg)² ≤ ∫f²·∫g².</div>
+
+<h3>Код</h3>
+<pre><code>import numpy as np
+
+def dot_r(x, y):  return float(x @ y)                 # евклидово
+def dot_c(x, y):  return complex(x @ np.conj(y))      # унитарное
+
+x = np.array([1., 2., 3.]); y = np.array([4., 0., -1.])
+lhs = abs(dot_r(x, y))
+rhs = np.linalg.norm(x) * np.linalg.norm(y)
+print(lhs, rhs, lhs &lt;= rhs + 1e-12)      # неравенство КБШ
+
+z = np.array([1+2j, 3-1j])
+print(dot_c(z, z).real &gt;= 0)             # (z,z) вещественно и >= 0
+print(np.isclose(dot_c(z, np.array([1j, 2.])),
+                 np.conj(dot_c(np.array([1j, 2.]), z))))  # эрмитовость
+
+cos = dot_r(x, y) / rhs                  # угол между векторами
+print(np.degrees(np.arccos(cos)))</code></pre>
+`});
+
+T.push({b:1,n:4,t:"Норма, ортонормированный базис. Ортогональное дополнение",
+s:"А. Г. Курош. Курс высшей алгебры",
+h:`
+<h3>Норма</h3>
+<div class="def"><b>Норма</b> ‖x‖ = sqrt((x,x)). Аксиомы нормы: ‖x‖ ≥ 0 и ‖x‖ = 0 ⟺ x = 0; ‖αx‖ = |α|·‖x‖; ‖x+y‖ ≤ ‖x‖+‖y‖ (следует из КБШ).</div>
+<p>Другие нормы в ℝⁿ: ‖x‖₁ = Σ|x<sub>i</sub>|, ‖x‖<sub>∞</sub> = max|x<sub>i</sub>|, ‖x‖<sub>p</sub> = (Σ|x<sub>i</sub>|<sup>p</sup>)<sup>1/p</sup>. Только ‖·‖₂ порождается скалярным произведением (равенство параллелограмма).</p>
+
+<h3>Ортонормированный базис (ОНБ)</h3>
+<div class="def"><b>Определение.</b> Базис e₁,…,e<sub>n</sub> ортонормирован, если (e<sub>i</sub>,e<sub>j</sub>) = δ<sub>ij</sub> (попарно ортогональны и единичной длины).</div>
+<p>Свойства ОНБ: ненулевая ортогональная система всегда ЛНЗ; координаты вычисляются проекциями ξ<sub>i</sub> = (x, e<sub>i</sub>); скалярное произведение имеет канонический вид (x,y) = Σξ<sub>i</sub>η<sub>i</sub>; ‖x‖² = Σξ<sub>i</sub>² (равенство Парсеваля). Матрица перехода между ОНБ — ортогональная (QᵀQ = E), в унитарном случае — унитарная (Q*Q = E).</p>
+<div class="thm"><b>Процесс Грама — Шмидта.</b> Из любого базиса a₁,…,a<sub>n</sub> строится ОНБ:</div>
+<div class="f">b<sub>k</sub> = a<sub>k</sub> − Σ<sub>j&lt;k</sub> ((a<sub>k</sub>, e<sub>j</sub>))·e<sub>j</sub>,  e<sub>k</sub> = b<sub>k</sub> / ‖b<sub>k</sub>‖</div>
+<p>Отсюда — QR-разложение A = QR.</p>
+
+<h3>Ортогональное дополнение и прямая сумма</h3>
+<div class="def"><b>Определение.</b> Для подпространства U ⊆ V: U<sup>⊥</sup> = {v ∈ V : (v,u) = 0 для всех u ∈ U} — <b>ортогональное дополнение</b>, само является подпространством.</div>
+<div class="thm"><b>Теорема о разложении.</b> Для конечномерного евклидова (унитарного) V и любого подпространства U:</div>
+<div class="f">V = U ⊕ U<sup>⊥</sup>,  dim U + dim U<sup>⊥</sup> = dim V,  (U<sup>⊥</sup>)<sup>⊥</sup> = U</div>
+<p><b>Доказательство-схема.</b> Возьмём ОНБ e₁,…,e<sub>k</sub> в U, для v ∈ V положим u = Σ(v,e<sub>i</sub>)e<sub>i</sub> ∈ U и w = v − u. Тогда (w, e<sub>j</sub>) = (v,e<sub>j</sub>) − (v,e<sub>j</sub>) = 0, значит w ∈ U<sup>⊥</sup> и v = u + w. Единственность: если v = u₁+w₁ = u₂+w₂, то u₁−u₂ = w₂−w₁ ∈ U ∩ U<sup>⊥</sup> = {0}.</p>
+<div class="note"><b>Приложение.</b> u = P<sub>U</sub>v — ортогональная проекция, ближайший к v элемент U (теорема о наилучшем приближении): ‖v − u‖ ≤ ‖v − u'‖ для всех u' ∈ U. Это основа МНК: решение min‖Ax − b‖ даёт нормальную систему AᵀAx = Aᵀb.</div>
+
+<h3>Код</h3>
+<pre><code>import numpy as np
+
+def gram_schmidt(A):                 # столбцы A - базис
+    Q = []
+    for a in A.T:
+        v = a.astype(float).copy()
+        for q in Q:
+            v -= (a @ q) * q         # вычитаем проекции
+        n = np.linalg.norm(v)
+        if n &gt; 1e-12:
+            Q.append(v / n)
+    return np.array(Q).T
+
+A = np.array([[1., 1., 0.], [1., 0., 1.], [0., 1., 1.]])
+Q = gram_schmidt(A)
+print(np.round(Q.T @ Q, 9))          # единичная матрица -> ОНБ
+
+# проекция вектора на подпространство span(Q) и ортогональная часть
+v = np.array([3., 1., 2.])
+u = Q @ (Q.T @ v)                    # P_U v
+w = v - u                            # компонента из U^perp
+print(np.round(w @ Q, 9))            # нули: w ортогонален U</code></pre>
+`});
+
+T.push({b:1,n:5,t:"Линейный оператор и его матрица. Собственные векторы и значения",
+s:"А. Г. Курош. Курс высшей алгебры",
+h:`
+<h3>Линейный оператор</h3>
+<div class="def"><b>Определение.</b> Отображение A: V → V линейно, если A(x+y) = Ax + Ay и A(αx) = αAx. Ядро ker A = {x : Ax = 0}, образ im A = A(V); <b>rk A + dim ker A = dim V</b>.</div>
+<p><b>Матрица оператора</b> в базисе e: столбцы — координаты образов базисных векторов, Ae<sub>j</sub> = Σ<sub>i</sub> a<sub>ij</sub>e<sub>i</sub>. Тогда действие оператора = умножение на матрицу: Y = A·X.</p>
+
+<h3>Преобразование матрицы при замене базиса</h3>
+<div class="thm"><b>Теорема.</b> Если T — матрица перехода от базиса e к базису f, то матрица оператора в новом базисе</div>
+<div class="f">A' = T⁻¹ A T   (матрицы A и A' <b>подобны</b>)</div>
+<p>Инварианты подобия: det A, tr A, ранг, характеристический многочлен, спектр, жорданова форма.</p>
+
+<h3>Характеристический многочлен</h3>
+<div class="def"><b>Определение.</b> χ(λ) = det(A − λE) — многочлен степени n. Его корни — <b>собственные значения</b>. По теореме Виета: Σλ<sub>i</sub> = tr A, Πλ<sub>i</sub> = det A.</div>
+<div class="def"><b>Собственный вектор</b> — x ≠ 0 такой, что Ax = λx. Находится из системы (A − λE)x = 0; собственное подпространство V<sub>λ</sub> = ker(A − λE).</div>
+<ul>
+<li><b>Алгебраическая кратность</b> — кратность λ как корня χ; <b>геометрическая</b> — dim V<sub>λ</sub>. Всегда 1 ≤ геом ≤ алг.</li>
+<li>Оператор <b>диагонализуем</b> ⟺ существует базис из собственных векторов ⟺ для каждого λ геометрическая кратность = алгебраической. Тогда A = S·diag(λ)·S⁻¹.</li>
+<li>Собственные векторы, отвечающие различным λ, линейно независимы.</li>
+<li><b>Теорема Гамильтона — Кэли:</b> χ(A) = 0.</li>
+</ul>
+<div class="note"><b>Геометрический смысл.</b> Собственный вектор задаёт инвариантное направление: оператор действует на нём как растяжение в λ раз (λ &lt; 0 — с отражением, |λ| &lt; 1 — сжатие, λ = 0 — вектор из ядра). Диагонализация = выбор системы координат, где оператор — независимые растяжения вдоль осей. Практика: PCA (собственные векторы ковариационной матрицы = главные компоненты), устойчивость динамических систем, PageRank, степенной метод.</div>
+
+<h3>Код</h3>
+<pre><code>import numpy as np
+
+A = np.array([[4., 1.],
+              [2., 3.]])
+
+lam, S = np.linalg.eig(A)            # значения и векторы (по столбцам)
+print(lam)                           # [5. 2.]
+print(np.isclose(lam.sum(), np.trace(A)))       # сумма = след
+print(np.isclose(lam.prod(), np.linalg.det(A))) # произведение = det
+
+# диагонализация: A = S diag(lam) S^{-1}
+print(np.allclose(S @ np.diag(lam) @ np.linalg.inv(S), A))
+
+# подобие при замене базиса: A' = T^{-1} A T имеет тот же спектр
+T = np.array([[1., 2.], [0., 1.]])
+A2 = np.linalg.inv(T) @ A @ T
+print(np.sort(np.linalg.eigvals(A2)))
+
+# характеристический многочлен
+print(np.poly(A))                    # коэффициенты det(lam E - A)</code></pre>
+`});
+
+T.push({b:1,n:6,t:"Квадратичные формы. Унитарные и нормальные операторы",
+s:"А. Г. Курош. Курс высшей алгебры",
+h:`
+<h3>Квадратичные формы</h3>
+<div class="def"><b>Определение.</b> Q(x) = Σ<sub>i,j</sub> a<sub>ij</sub>x<sub>i</sub>x<sub>j</sub> = XᵀAX, где A = Aᵀ — симметричная матрица формы. При замене X = TY матрица преобразуется <b>конгруэнтно</b>: A' = TᵀAT (не подобно!).</div>
+<div class="thm"><b>Канонический вид.</b> Любая квадратичная форма приводится невырожденной линейной заменой к виду Q = Σ λ<sub>i</sub>y<sub>i</sub>² (метод Лагранжа — выделение полных квадратов; ортогональная замена по собственным векторам A; метод Якоби).</div>
+<div class="thm"><b>Закон инерции Сильвестра.</b> Число положительных (p) и отрицательных (q) коэффициентов канонического вида не зависит от способа приведения. Пара (p, q) — сигнатура, p+q = rk A.</div>
+
+<h3>Знакоопределённость</h3>
+<table>
+<tr><th>Тип</th><th>Условие</th><th>Собственные значения</th><th>Критерий Сильвестра (главные миноры Δ<sub>k</sub>)</th></tr>
+<tr><td>Положительно определённая</td><td>Q(x) &gt; 0 при x ≠ 0</td><td>все λ<sub>i</sub> &gt; 0</td><td>все Δ<sub>k</sub> &gt; 0</td></tr>
+<tr><td>Отрицательно определённая</td><td>Q(x) &lt; 0 при x ≠ 0</td><td>все λ<sub>i</sub> &lt; 0</td><td>знаки чередуются: Δ₁&lt;0, Δ₂&gt;0, …</td></tr>
+<tr><td>Полуопределённая</td><td>Q(x) ≥ 0</td><td>λ<sub>i</sub> ≥ 0</td><td>все главные миноры (не только угловые) ≥ 0</td></tr>
+<tr><td>Знакопеременная</td><td>принимает оба знака</td><td>есть λ&gt;0 и λ&lt;0</td><td>—</td></tr>
+</table>
+<div class="note"><b>Применение.</b> Гессиан в задачах экстремума; ковариационная матрица положительно полуопределена; разложение Холецкого A = LLᵀ существует ⟺ A положительно определена; квадратичная форма задаёт кривые/поверхности 2-го порядка.</div>
+
+<h3>Унитарные и нормальные операторы</h3>
+<div class="def"><b>Сопряжённый оператор</b> A*: (Ax, y) = (x, A*y). В ОНБ матрица A* = conj(Aᵀ) (эрмитово сопряжение); в вещественном случае A* = Aᵀ.</div>
+<ul>
+<li><b>Унитарный</b> (ортогональный в ℝ): A*A = AA* = E, т.е. A* = A⁻¹. Сохраняет скалярное произведение и норму: (Ax,Ay) = (x,y). Все |λ| = 1, det = ±1. Геометрически — поворот/отражение.</li>
+<li><b>Эрмитов (самосопряжённый)</b>: A* = A. Все λ вещественны, собственные векторы разных λ ортогональны.</li>
+<li><b>Нормальный</b>: A*A = AA*. Обобщение: включает унитарные, эрмитовы, кососимметричные.</li>
+</ul>
+<div class="thm"><b>Спектральная теорема.</b> Оператор в унитарном пространстве нормален ⟺ существует ОНБ из собственных векторов, т.е. A = UΛU* с унитарной U. Для вещественных симметричных матриц: A = QΛQᵀ, Q ортогональна, Λ вещественна.</div>
+
+<h3>Код</h3>
+<pre><code>import numpy as np
+
+A = np.array([[2., -1., 0.],
+              [-1., 2., -1.],
+              [0., -1., 2.]])
+
+# 1) критерий Сильвестра
+minors = [np.linalg.det(A[:k, :k]) for k in (1, 2, 3)]
+print(minors, all(m &gt; 0 for m in minors))   # положительно определена
+
+# 2) через собственные значения (спектральная теорема)
+lam, Q = np.linalg.eigh(A)                  # eigh: для симметричных
+print(lam, np.allclose(Q @ np.diag(lam) @ Q.T, A))
+print(np.allclose(Q.T @ Q, np.eye(3)))      # Q ортогональна -> ОНБ
+
+# 3) канонический вид: Q(x) = sum lam_i * y_i^2, x = Q y
+x = np.array([1., 2., 3.]); y = Q.T @ x
+print(np.isclose(x @ A @ x, (lam * y**2).sum()))
+
+# 4) разложение Холецкого существует только для положит. определённых
+print(np.linalg.cholesky(A))
+
+# 5) проверка нормальности
+U = np.array([[0., -1.], [1., 0.]])         # поворот на 90 градусов
+print(np.allclose(U.T @ U, U @ U.T))        # нормальный и ортогональный</code></pre>
+`});
+
+T.push({b:1,n:7,t:"Производные. Дифференцируемость, частные производные, полный дифференциал",
+s:"Г. М. Фихтенгольц. Курс дифференциального и интегрального исчисления",
+h:`
+<h3>Производная и дифференцируемость (одна переменная)</h3>
+<div class="def"><b>Определение.</b> f'(x₀) = lim<sub>Δx→0</sub> (f(x₀+Δx) − f(x₀))/Δx. Функция дифференцируема в точке ⟺ Δf = f'(x₀)Δx + o(Δx).</div>
+<p>Для одной переменной дифференцируемость ⟺ существование конечной производной. Дифференцируемость ⇒ непрерывность (обратное неверно: |x| в нуле).</p>
+
+<h3>Частные производные</h3>
+<div class="def"><b>Определение.</b> ∂f/∂x<sub>i</sub> (M₀) = lim<sub>h→0</sub> (f(…, x<sub>i</sub>+h, …) − f(…))/h — производная по одной переменной при фиксированных остальных.</div>
+
+<h3>Дифференцируемость функции многих переменных</h3>
+<div class="def"><b>Определение.</b> f дифференцируема в M₀, если полное приращение представимо в виде</div>
+<div class="f">Δf = A₁Δx₁ + … + A<sub>n</sub>Δx<sub>n</sub> + o(ρ),  ρ = sqrt(Δx₁² + … + Δx<sub>n</sub>²)</div>
+<div class="thm"><b>Необходимое условие.</b> Если f дифференцируема в M₀, то она непрерывна в M₀, все частные производные существуют и A<sub>i</sub> = ∂f/∂x<sub>i</sub>(M₀).</div>
+<div class="thm"><b>Достаточное условие.</b> Если все частные производные существуют в окрестности M₀ и <b>непрерывны</b> в самой точке M₀, то f дифференцируема в M₀ (класс C¹).</div>
+<div class="note"><b>Важно: обратное к необходимому условию неверно.</b> Пример: f(x,y) = xy/(x²+y²) при (x,y) ≠ 0 и f(0,0) = 0. Обе частные производные в нуле существуют и равны 0, но функция даже не непрерывна в нуле (по прямой y = x предел равен 1/2). Существование частных производных ≠ дифференцируемость.</div>
+
+<h3>Полный дифференциал</h3>
+<div class="f">df = (∂f/∂x₁)dx₁ + … + (∂f/∂x<sub>n</sub>)dx<sub>n</sub> = ∇f · dx</div>
+<p>Геометрия: график линеаризуется касательной плоскостью z = f(M₀) + df. Приближённые вычисления: f(M₀+Δ) ≈ f(M₀) + df.</p>
+<p><b>Производные высших порядков.</b> Теорема Шварца (Клеро): если смешанные производные ∂²f/∂x∂y и ∂²f/∂y∂x непрерывны, то они равны. Дифференциал 2-го порядка d²f = Σ (∂²f/∂x<sub>i</sub>∂x<sub>j</sub>) dx<sub>i</sub>dx<sub>j</sub> — квадратичная форма с матрицей Гессе.</p>
+
+<h3>Дифференцирование сложной функции</h3>
+<div class="thm"><b>Цепное правило.</b> Пусть z = f(u₁,…,u<sub>m</sub>), u<sub>k</sub> = u<sub>k</sub>(x₁,…,x<sub>n</sub>). Тогда</div>
+<div class="f">∂z/∂x<sub>i</sub> = Σ<sub>k</sub> (∂f/∂u<sub>k</sub>)·(∂u<sub>k</sub>/∂x<sub>i</sub>)</div>
+<p>В матричной форме: J<sub>f∘u</sub> = J<sub>f</sub>·J<sub>u</sub> (произведение якобианов). Частный случай — полная производная вдоль кривой: dz/dt = f<sub>x</sub>x'(t) + f<sub>y</sub>y'(t).</p>
+<p><b>Инвариантность формы первого дифференциала:</b> df = Σ f<sub>u<sub>k</sub></sub> du<sub>k</sub> независимо от того, независимые переменные u<sub>k</sub> или функции.</p>
+<div class="note"><b>ML-связь.</b> Обратное распространение ошибки — это цепное правило, применённое справа налево (reverse-mode autodiff): дешевле, когда выход скалярный, а входов много.</div>
+
+<h3>Код</h3>
+<pre><code>import numpy as np
+from scipy.optimize import approx_fprime      # численный градиент
+
+f = lambda p: p[0]**2 * np.sin(p[1]) + p[1]**3
+
+p0 = np.array([1.0, 0.5])
+grad_num = approx_fprime(p0, f, 1e-6)
+grad_exact = np.array([2*p0[0]*np.sin(p0[1]),
+                       p0[0]**2*np.cos(p0[1]) + 3*p0[1]**2])
+print(grad_num, grad_exact)
+
+# полный дифференциал как линейное приближение
+d = np.array([0.01, -0.02])
+print(f(p0 + d), f(p0) + grad_exact @ d)      # близкие значения
+
+# цепное правило: z = f(u,v), u = u(t), v = v(t)
+import sympy as sp
+t, u, v = sp.symbols('t u v')
+z = u**2 + sp.sin(v)
+U, V = sp.cos(t), t**2
+dz_dt = sp.diff(z, u)*sp.diff(U, t) + sp.diff(z, v)*sp.diff(V, t)
+print(sp.simplify(dz_dt.subs({u: U, v: V})))</code></pre>
+`});
+
+T.push({b:1,n:8,t:"Градиент. Безусловный и условный экстремум функции многих переменных",
+s:"Г. М. Фихтенгольц. Курс дифференциального и интегрального исчисления",
+h:`
+<h3>Градиент</h3>
+<div class="def"><b>Определение.</b> ∇f = (∂f/∂x₁, …, ∂f/∂x<sub>n</sub>). Производная по направлению единичного вектора l: ∂f/∂l = (∇f, l) = ‖∇f‖·cos φ.</div>
+<p><b>Свойства:</b> градиент указывает направление наискорейшего возрастания; ‖∇f‖ — максимальная скорость роста; градиент ортогонален линии (поверхности) уровня f = const. Антиградиент — направление наискорейшего убывания (основа градиентного спуска).</p>
+
+<h3>Безусловный экстремум</h3>
+<div class="thm"><b>Необходимое условие (теорема Ферма).</b> Если M₀ — точка локального экстремума и f дифференцируема, то ∇f(M₀) = 0. Такие точки — <b>стационарные</b> (критические). Экстремум также возможен в точках, где производные не существуют.</div>
+<div class="thm"><b>Достаточное условие.</b> Пусть f ∈ C², ∇f(M₀) = 0, H — матрица Гессе H<sub>ij</sub> = ∂²f/∂x<sub>i</sub>∂x<sub>j</sub>(M₀). Тогда:<br>
+• H положительно определена ⇒ строгий локальный минимум;<br>
+• H отрицательно определена ⇒ строгий локальный максимум;<br>
+• H знакопеременна ⇒ экстремума нет (седловая точка);<br>
+• H вырождена (полуопределена) ⇒ требуется дополнительное исследование.</div>
+<p>Проверка знакоопределённости — критерий Сильвестра по угловым минорам либо знаки собственных значений H. Для n = 2: D = f<sub>xx</sub>f<sub>yy</sub> − f<sub>xy</sub>²; D &gt; 0 и f<sub>xx</sub> &gt; 0 — минимум, D &gt; 0 и f<sub>xx</sub> &lt; 0 — максимум, D &lt; 0 — седло.</p>
+<div class="note"><b>Наибольшее/наименьшее значение на компакте</b> ищется сравнением значений в стационарных внутренних точках и на границе (теорема Вейерштрасса гарантирует достижимость).</div>
+
+<h3>Условный экстремум</h3>
+<p>Задача: экстремум f(x₁,…,x<sub>n</sub>) при ограничениях g<sub>j</sub>(x) = 0, j = 1..m (m &lt; n).</p>
+<div class="thm"><b>Метод множителей Лагранжа.</b> Составляется функция</div>
+<div class="f">L(x, λ) = f(x) − Σ<sub>j</sub> λ<sub>j</sub> g<sub>j</sub>(x)</div>
+<p>Необходимое условие: ∇<sub>x</sub>L = 0 и g<sub>j</sub>(x) = 0 — система n+m уравнений. Условие регулярности: ранг матрицы Якоби ограничений равен m.</p>
+<p><b>Достаточное условие:</b> исследуется знак второго дифференциала d²L в стационарной точке <b>на касательном подпространстве</b> ограничений (Σ dg<sub>j</sub> = 0), либо анализируется окаймлённый гессиан.</p>
+<p><b>Геометрия:</b> в точке условного экстремума ∇f = Σλ<sub>j</sub>∇g<sub>j</sub> — градиент цели лежит в линейной оболочке градиентов ограничений, линии уровня касаются поверхности ограничений.</p>
+<div class="note"><b>Обобщение — условия Каруша — Куна — Таккера (ККТ)</b> для неравенств g(x) ≤ 0: ∇f + Σμ<sub>i</sub>∇g<sub>i</sub> = 0, μ<sub>i</sub> ≥ 0, μ<sub>i</sub>g<sub>i</sub>(x) = 0 (дополняющая нежёсткость). Основа SVM, регуляризации, задач оптимизации в ML.</div>
+
+<h3>Код</h3>
+<pre><code>import numpy as np, sympy as sp
+
+# 1) безусловный экстремум: анализ гессиана
+x, y, lam = sp.symbols('x y lam')
+f = x**3 + y**3 - 3*x*y
+crit = sp.solve([sp.diff(f, x), sp.diff(f, y)], [x, y], dict=True)
+H = sp.hessian(f, (x, y))
+for p in crit:
+    Hp = H.subs(p)
+    ev = list(Hp.eigenvals().keys())
+    kind = ('минимум' if all(e &gt; 0 for e in ev)
+            else 'максимум' if all(e &lt; 0 for e in ev) else 'седло')
+    print(p, ev, kind)
+
+# 2) условный экстремум: Лагранж. max x*y при x + y = 10
+g = x + y - 10
+L = x*y - lam*g
+print(sp.solve([sp.diff(L, x), sp.diff(L, y), sp.diff(L, lam)], [x, y, lam]))
+
+# 3) градиентный спуск (антиградиент)
+grad = lambda p: np.array([2*p[0], 10*p[1]])
+p = np.array([5., 5.])
+for _ in range(60):
+    p -= 0.1 * grad(p)
+print(np.round(p, 6))                 # -> [0, 0]</code></pre>
+`});
+
+T.push({b:1,n:9,t:"Вероятностное пространство. Условная вероятность, формулы полной вероятности и Байеса",
+s:"А. А. Боровков. Теория вероятностей",
+h:`
+<h3>Вероятностное пространство</h3>
+<div class="def"><b>Тройка Колмогорова (Ω, F, P):</b><br>
+• Ω — пространство элементарных исходов ω;<br>
+• F — σ-алгебра событий: Ω ∈ F; A ∈ F ⇒ Ā ∈ F; счётное объединение элементов F лежит в F;<br>
+• P: F → [0,1] — вероятностная мера.</div>
+<p><b>Аксиомы:</b> 1) P(A) ≥ 0; 2) P(Ω) = 1; 3) счётная аддитивность: для попарно несовместных A<sub>i</sub> P(∪A<sub>i</sub>) = ΣP(A<sub>i</sub>).</p>
+<p><b>Свойства:</b> P(∅) = 0; P(Ā) = 1 − P(A); монотонность A ⊆ B ⇒ P(A) ≤ P(B); P(A∪B) = P(A)+P(B)−P(A∩B); формула включений-исключений; непрерывность меры: A<sub>n</sub> ↑ A ⇒ P(A<sub>n</sub>) → P(A); полуаддитивность P(∪A<sub>i</sub>) ≤ ΣP(A<sub>i</sub>).</p>
+<p><b>Классическая схема:</b> Ω конечно, исходы равновероятны, P(A) = |A|/|Ω|. <b>Геометрическая:</b> P(A) = mes(A)/mes(Ω).</p>
+
+<h3>Условная вероятность и независимость</h3>
+<div class="def"><b>Определение.</b> P(A|B) = P(A∩B)/P(B) при P(B) &gt; 0. Это вероятностная мера на Ω (удовлетворяет всем аксиомам).</div>
+<div class="f">Теорема умножения: P(A₁…A<sub>n</sub>) = P(A₁)·P(A₂|A₁)·P(A₃|A₁A₂)·…</div>
+<p><b>Независимость:</b> A и B независимы ⟺ P(A∩B) = P(A)P(B) ⟺ P(A|B) = P(A). Для набора событий требуется независимость в совокупности (попарной недостаточно — пример Бернштейна с тетраэдром).</p>
+
+<h3>Формула полной вероятности</h3>
+<p>Пусть H₁,…,H<sub>n</sub> — <b>полная группа</b> (гипотезы): попарно несовместны, ∪H<sub>i</sub> = Ω, P(H<sub>i</sub>) &gt; 0. Тогда</p>
+<div class="f">P(A) = Σ<sub>i</sub> P(H<sub>i</sub>)·P(A | H<sub>i</sub>)</div>
+
+<h3>Формула Байеса</h3>
+<div class="f">P(H<sub>k</sub> | A) = P(H<sub>k</sub>)·P(A|H<sub>k</sub>) / Σ<sub>i</sub> P(H<sub>i</sub>)·P(A|H<sub>i</sub>)</div>
+<p>P(H<sub>k</sub>) — априорная вероятность гипотезы, P(H<sub>k</sub>|A) — апостериорная, P(A|H<sub>k</sub>) — правдоподобие. Смысл: пересчёт убеждений после наблюдения данных.</p>
+<div class="note"><b>Классический пример (тест на болезнь).</b> Болезнь у 1% населения, чувствительность теста 99%, специфичность 95%. P(болен | тест+) = 0.01·0.99 / (0.01·0.99 + 0.99·0.05) ≈ 0.167 — даже при положительном тесте вероятность болезни всего 17%, потому что база (априор) мала. Это же лежит в основе наивного байесовского классификатора: argmax<sub>c</sub> P(c)·Π P(x<sub>i</sub>|c).</div>
+
+<h3>Код</h3>
+<pre><code>import numpy as np
+
+# Формула полной вероятности и Байеса (медицинский тест)
+P_H = np.array([0.01, 0.99])              # болен / здоров
+P_A_H = np.array([0.99, 0.05])            # P(тест+ | H)
+
+P_A = (P_H * P_A_H).sum()                 # полная вероятность
+post = P_H * P_A_H / P_A                  # апостериорные
+print(round(P_A, 4), np.round(post, 4))   # 0.0594 [0.1667 0.8333]
+
+# Проверка симуляцией
+rng = np.random.default_rng(0)
+n = 1_000_000
+sick = rng.random(n) &lt; 0.01
+pos = np.where(sick, rng.random(n) &lt; 0.99, rng.random(n) &lt; 0.05)
+print((sick &amp; pos).sum() / pos.sum())     # ~0.167
+
+# Независимость: проверка P(AB) = P(A)P(B)
+A = rng.random(n) &lt; 0.3
+B = rng.random(n) &lt; 0.5
+print(round((A &amp; B).mean(), 3), round(A.mean() * B.mean(), 3))</code></pre>
+`});
+
+T.push({b:1,n:10,t:"Случайные величины. Типы распределений и их примеры",
+s:"А. А. Боровков. Теория вероятностей",
+h:`
+<h3>Случайная величина</h3>
+<div class="def"><b>Определение.</b> Случайная величина — измеримая функция X: Ω → ℝ, т.е. для любого x множество {ω : X(ω) &lt; x} ∈ F. Её закон полностью описывается <b>функцией распределения</b> F(x) = P(X &lt; x).</div>
+<p><b>Свойства F(x):</b> неубывает; F(−∞) = 0, F(+∞) = 1; непрерывна слева (в конвенции P(X &lt; x)); P(a ≤ X &lt; b) = F(b) − F(a).</p>
+
+<h3>Типы распределений</h3>
+<table>
+<tr><th>Тип</th><th>Характеристика</th><th>Пример</th></tr>
+<tr><td><b>Дискретное</b></td><td>F — ступенчатая, сосредоточена на не более чем счётном множестве, Σp<sub>i</sub> = 1</td><td>Бернулли, Пуассон</td></tr>
+<tr><td><b>Абсолютно непрерывное</b></td><td>F(x) = ∫<sub>−∞</sub><sup>x</sup> p(t)dt, существует плотность p(t) ≥ 0</td><td>нормальное, равномерное</td></tr>
+<tr><td><b>Сингулярное</b></td><td>F непрерывна, но её производная равна 0 почти всюду; мера сосредоточена на множестве нулевой меры Лебега</td><td>канторова лестница</td></tr>
+<tr><td><b>Смесь</b></td><td>F = α₁F<sub>д</sub> + α₂F<sub>а.н.</sub> + α₃F<sub>с</sub>, Σα<sub>i</sub> = 1</td><td>время ожидания с атомом в нуле</td></tr>
+</table>
+<div class="thm"><b>Теорема Лебега о разложении.</b> Любая функция распределения единственным образом представима в виде выпуклой комбинации дискретной, абсолютно непрерывной и сингулярной компонент.</div>
+
+<h3>Основные распределения</h3>
+<table>
+<tr><th>Распределение</th><th>Закон</th><th>EX</th><th>DX</th></tr>
+<tr><td>Бернулли B(p)</td><td>P(X=1)=p, P(X=0)=1−p</td><td>p</td><td>p(1−p)</td></tr>
+<tr><td>Биномиальное Bin(n,p)</td><td>P(X=k) = C(n,k)p<sup>k</sup>(1−p)<sup>n−k</sup></td><td>np</td><td>np(1−p)</td></tr>
+<tr><td>Пуассона Pois(λ)</td><td>P(X=k) = λ<sup>k</sup>e<sup>−λ</sup>/k!</td><td>λ</td><td>λ</td></tr>
+<tr><td>Геометрическое Geom(p)</td><td>P(X=k) = (1−p)<sup>k−1</sup>p</td><td>1/p</td><td>(1−p)/p²</td></tr>
+<tr><td>Равномерное U(a,b)</td><td>p(x) = 1/(b−a) на [a,b]</td><td>(a+b)/2</td><td>(b−a)²/12</td></tr>
+<tr><td>Нормальное N(μ,σ²)</td><td>p(x) = exp(−(x−μ)²/(2σ²)) / (σ·sqrt(2π))</td><td>μ</td><td>σ²</td></tr>
+<tr><td>Гамма Γ(k,θ)</td><td>p(x) = x<sup>k−1</sup>e<sup>−x/θ</sup> / (Γ(k)θ<sup>k</sup>)</td><td>kθ</td><td>kθ²</td></tr>
+<tr><td>Показательное Exp(λ)</td><td>частный случай Γ(1, 1/λ)</td><td>1/λ</td><td>1/λ²</td></tr>
+</table>
+<div class="note"><b>Связи.</b> Bin(n,p) → Pois(λ) при n→∞, np→λ (закон редких событий); Bin(n,p) → N(np, npq) при больших n (Муавр—Лаплас); сумма k независимых Exp(λ) даёт Γ(k, 1/λ); сумма квадратов k независимых N(0,1) даёт χ²(k) = Γ(k/2, 2); геометрическое — единственное дискретное без памяти, показательное — единственное непрерывное без памяти.</div>
+
+<h3>Код</h3>
+<pre><code>import numpy as np
+from scipy import stats
+
+rng = np.random.default_rng(42)
+
+# дискретное: Пуассон
+x = rng.poisson(3.0, 100_000)
+print(x.mean(), x.var())                      # оба ~ 3
+
+# абсолютно непрерывное: нормальное
+z = rng.normal(0, 1, 100_000)
+print(stats.norm.cdf(1.96) - stats.norm.cdf(-1.96))   # ~0.95
+
+# смесь: с вероятностью 0.3 атом в нуле, иначе Exp(1)
+u = rng.random(10)
+mix = np.where(u &lt; 0.3, 0.0, rng.exponential(1.0, 10))
+print(np.round(mix, 3))
+
+# биномиальное -> пуассоновское приближение
+n, p = 1000, 0.003
+print(stats.binom.pmf(3, n, p), stats.poisson.pmf(3, n*p))</code></pre>
+`});
+
+T.push({b:1,n:11,t:"Числовые характеристики. Ковариация и корреляция",
+s:"А. А. Боровков. Теория вероятностей",
+h:`
+<h3>Математическое ожидание</h3>
+<div class="def"><b>Определение.</b> EX = Σ x<sub>i</sub>p<sub>i</sub> (дискретный случай) или EX = ∫ x·p(x)dx (непрерывный); в общем виде EX = ∫<sub>Ω</sub> X dP — интеграл Лебега. Существует, когда E|X| &lt; ∞.</div>
+<p><b>Свойства:</b> линейность E(aX+bY) = aEX + bEY (всегда, даже при зависимости); X ≥ 0 ⇒ EX ≥ 0; |EX| ≤ E|X|; для независимых E(XY) = EX·EY; формула замены Eg(X) = ∫g(x)p(x)dx (LOTUS).</p>
+
+<h3>Дисперсия и моменты</h3>
+<div class="f">DX = E(X − EX)² = EX² − (EX)²,  σ = sqrt(DX)</div>
+<p><b>Свойства:</b> DX ≥ 0; D(aX+b) = a²DX; D(X+Y) = DX + DY + 2cov(X,Y); для независимых D(X+Y) = DX + DY.</p>
+<ul>
+<li><b>Начальный момент</b> порядка k: α<sub>k</sub> = EX<sup>k</sup>. <b>Центральный:</b> μ<sub>k</sub> = E(X − EX)<sup>k</sup>.</li>
+<li><b>Асимметрия</b> (skewness) γ₁ = μ₃/σ³ — мера скошенности.</li>
+<li><b>Эксцесс</b> (kurtosis) γ₂ = μ₄/σ⁴ − 3 — мера «тяжести хвостов»; для нормального = 0.</li>
+<li>Из существования момента порядка k следует существование всех моментов меньших порядков.</li>
+</ul>
+<div class="thm"><b>Неравенство Маркова:</b> P(|X| ≥ ε) ≤ E|X|/ε. <b>Неравенство Чебышёва:</b> P(|X − EX| ≥ ε) ≤ DX/ε².</div>
+
+<h3>Совместное распределение</h3>
+<p>F(x,y) = P(X &lt; x, Y &lt; y); плотность p(x,y); маргинальные распределения p<sub>X</sub>(x) = ∫p(x,y)dy. Независимость ⟺ F(x,y) = F<sub>X</sub>(x)F<sub>Y</sub>(y) ⟺ p(x,y) = p<sub>X</sub>(x)p<sub>Y</sub>(y).</p>
+
+<h3>Ковариация и корреляция</h3>
+<div class="f">cov(X,Y) = E[(X−EX)(Y−EY)] = E(XY) − EX·EY</div>
+<div class="f">ρ(X,Y) = cov(X,Y) / (σ<sub>X</sub>σ<sub>Y</sub>) ∈ [−1, 1]</div>
+<ul>
+<li>cov(X,X) = DX; билинейность и симметричность; cov — скалярное произведение на пространстве центрированных СВ.</li>
+<li>|ρ| ≤ 1 — прямое следствие неравенства Коши—Буняковского; |ρ| = 1 ⟺ Y = aX + b почти наверное.</li>
+<li>Независимость ⇒ cov = 0. <b>Обратное неверно:</b> X ~ U(−1,1), Y = X²: cov = EX³ − EX·EX² = 0, но Y полностью определяется X.</li>
+<li>Ковариационная матрица Σ = E[(X−EX)(X−EX)ᵀ] симметрична и положительно полуопределена.</li>
+</ul>
+<div class="note"><b>Условное ожидание.</b> E(Y|X) — случайная величина; формула полного ожидания E[E(Y|X)] = EY; разложение дисперсии DY = E[D(Y|X)] + D[E(Y|X)] (bias-variance по структуре).</div>
+
+<h3>Код</h3>
+<pre><code>import numpy as np
+
+rng = np.random.default_rng(1)
+n = 200_000
+X = rng.normal(0, 1, n)
+Y = 2*X + rng.normal(0, 1, n)          # линейно зависимы
+
+print(X.mean(), X.var(ddof=1))
+cov = ((X - X.mean()) * (Y - Y.mean())).mean()
+print(cov, np.cov(X, Y)[0, 1])
+print(np.corrcoef(X, Y)[0, 1])          # ~0.894
+
+# нулевая корреляция при полной зависимости
+U = rng.uniform(-1, 1, n); V = U**2
+print(round(np.corrcoef(U, V)[0, 1], 3))       # ~0.0
+
+# ковариационная матрица положительно полуопределена
+S = np.cov(np.vstack([X, Y]))
+print(np.linalg.eigvalsh(S) &gt;= -1e-9)
+
+# неравенство Чебышёва
+eps = 3
+print((np.abs(X - X.mean()) &gt;= eps).mean(), X.var()/eps**2)</code></pre>
+`});
+
+T.push({b:1,n:12,t:"Предельные теоремы: ЗБЧ, ЦПТ, теорема Муавра — Лапласа",
+s:"А. А. Боровков. Теория вероятностей",
+h:`
+<h3>Виды сходимости</h3>
+<ul>
+<li><b>По вероятности:</b> X<sub>n</sub> →<sup>P</sup> X, если P(|X<sub>n</sub> − X| &gt; ε) → 0 для любого ε &gt; 0.</li>
+<li><b>Почти наверное (с вероятностью 1):</b> P(lim X<sub>n</sub> = X) = 1. Сильнее сходимости по вероятности.</li>
+<li><b>По распределению (слабая):</b> F<sub>n</sub>(x) → F(x) во всех точках непрерывности F. Самая слабая.</li>
+</ul>
+<p>Иерархия: п.н. ⇒ по вероятности ⇒ по распределению.</p>
+
+<h3>Закон больших чисел</h3>
+<div class="thm"><b>ЗБЧ в форме Чебышёва.</b> Если X₁,…,X<sub>n</sub> независимы и DX<sub>i</sub> ≤ C, то среднее сходится по вероятности к среднему ожиданий:</div>
+<div class="f">P( |(1/n)ΣX<sub>i</sub> − (1/n)ΣEX<sub>i</sub>| &gt; ε ) → 0</div>
+<p><b>Доказательство:</b> применить неравенство Чебышёва к среднему: D(X̄) = (1/n²)ΣDX<sub>i</sub> ≤ C/n → 0.</p>
+<div class="thm"><b>ЗБЧ Хинчина.</b> Для н.о.р. величин с конечным EX = a: X̄<sub>n</sub> →<sup>P</sup> a (дисперсия не требуется).</div>
+<div class="thm"><b>Усиленный ЗБЧ Колмогорова.</b> Для н.о.р. с E|X| &lt; ∞: X̄<sub>n</sub> → a почти наверное.</div>
+<p><b>Теорема Бернулли</b> (частный случай): частота события m/n →<sup>P</sup> p. Это обоснование частотной интерпретации вероятности и метода Монте-Карло.</p>
+
+<h3>Центральная предельная теорема</h3>
+<div class="thm"><b>ЦПТ (Линдеберг — Леви).</b> Пусть X₁, X₂, … независимы, одинаково распределены, EX = a, DX = σ² ∈ (0,∞). Тогда</div>
+<div class="f">(ΣX<sub>i</sub> − na) / (σ·sqrt(n)) ⟹ N(0, 1)</div>
+<p>Эквивалентно: X̄<sub>n</sub> ≈ N(a, σ²/n) при больших n. Скорость сходимости — оценка Берри — Эссеена: sup|F<sub>n</sub>(x) − Φ(x)| ≤ C·E|X−a|³/(σ³sqrt(n)).</p>
+<p>Обобщения: теорема Ляпунова (разнораспределённые слагаемые, условие Ляпунова), условие Линдеберга (нет доминирующего слагаемого).</p>
+
+<h3>Теорема Муавра — Лапласа</h3>
+<p>Частный случай ЦПТ для схемы Бернулли, S<sub>n</sub> ~ Bin(n,p):</p>
+<div class="f">Локальная: P(S<sub>n</sub> = k) ≈ φ(x) / sqrt(npq),  x = (k − np)/sqrt(npq)</div>
+<div class="f">Интегральная: P(a ≤ S<sub>n</sub> ≤ b) ≈ Φ((b−np)/sqrt(npq)) − Φ((a−np)/sqrt(npq))</div>
+<p>Условия применимости: npq &gt; 9 (иначе при малом p лучше пуассоновское приближение). Рекомендуется поправка на непрерывность (±0.5).</p>
+<div class="note"><b>Практика.</b> ЦПТ обосновывает доверительные интервалы X̄ ± z<sub>1−α/2</sub>·s/sqrt(n), z-тесты, правило «трёх сигм», нормальность ошибок в регрессии, оценку погрешности Монте-Карло ~ 1/sqrt(n).</div>
+
+<h3>Код</h3>
+<pre><code>import numpy as np
+from scipy import stats
+
+rng = np.random.default_rng(0)
+
+# ЗБЧ: среднее сходится к EX = 1/2 для U(0,1)
+for n in (10, 1_000, 100_000, 10_000_000):
+    print(n, round(rng.random(n).mean(), 5))
+
+# ЦПТ: суммы экспоненциальных -> нормальное
+n, m = 30, 200_000
+S = rng.exponential(1.0, (m, n)).sum(axis=1)
+Z = (S - n*1.0) / (1.0 * np.sqrt(n))
+print(round(Z.mean(), 3), round(Z.std(), 3))
+print(stats.kstest(Z, 'norm').pvalue &gt; 0.001)   # согласуется с N(0,1)
+
+# Муавр - Лаплас с поправкой на непрерывность
+n, p = 400, 0.5
+exact = stats.binom.cdf(210, n, p) - stats.binom.cdf(189, n, p)
+sd = np.sqrt(n*p*(1-p))
+appr = stats.norm.cdf((210.5-n*p)/sd) - stats.norm.cdf((189.5-n*p)/sd)
+print(round(exact, 5), round(appr, 5))</code></pre>
+`});
+
+T.push({b:1,n:13,t:"Описательная статистика. Теорема Гливенко — Кантелли, выборочные характеристики",
+s:"Г. Крамер. Математические методы статистики",
+h:`
+<h3>Выборка и статистики</h3>
+<div class="def"><b>Выборка</b> X₁,…,X<sub>n</sub> — набор независимых одинаково распределённых величин с функцией распределения F. <b>Статистика</b> — любая измеримая функция от выборки, не зависящая от неизвестных параметров. <b>Вариационный ряд</b> X<sub>(1)</sub> ≤ … ≤ X<sub>(n)</sub> — порядковые статистики.</div>
+
+<h3>Эмпирическая функция распределения</h3>
+<div class="f">F<sub>n</sub>(x) = (1/n)·#{ i : X<sub>i</sub> &lt; x } = (1/n)Σ I(X<sub>i</sub> &lt; x)</div>
+<p>Для фиксированного x величина n·F<sub>n</sub>(x) ~ Bin(n, F(x)), поэтому EF<sub>n</sub>(x) = F(x) (несмещённость) и DF<sub>n</sub>(x) = F(x)(1−F(x))/n → 0 (состоятельность). По ЦПТ sqrt(n)(F<sub>n</sub>(x) − F(x)) ⟹ N(0, F(1−F)).</p>
+<div class="thm"><b>Теорема Гливенко — Кантелли («основная теорема статистики»).</b></div>
+<div class="f">sup<sub>x</sub> |F<sub>n</sub>(x) − F(x)| → 0  почти наверное при n → ∞</div>
+<p>Сходимость равномерная по x, а не только поточечная. Смысл: по выборке можно восстановить весь закон распределения. Количественное уточнение — неравенство Дворецкого — Кифера — Вольфовица: P(sup|F<sub>n</sub> − F| &gt; ε) ≤ 2exp(−2nε²).</p>
+
+<h3>Выборочные характеристики</h3>
+<div class="f">Выборочное среднее: X̄ = (1/n)ΣX<sub>i</sub>;  EX̄ = a, DX̄ = σ²/n</div>
+<div class="f">Смещённая дисперсия: S²<sub>0</sub> = (1/n)Σ(X<sub>i</sub> − X̄)²,  ES²<sub>0</sub> = σ²·(n−1)/n</div>
+<div class="f">Несмещённая (исправленная): S² = (1/(n−1))Σ(X<sub>i</sub> − X̄)²,  ES² = σ²</div>
+<p><b>Почему n−1 (поправка Бесселя):</b> отклонения считаются от оценённого по той же выборке X̄, а не от истинного a; сумма квадратов при этом минимальна, что систематически занижает дисперсию. Теряется одна степень свободы.</p>
+<p><b>Выборочные моменты:</b> α̂<sub>k</sub> = (1/n)ΣX<sub>i</sub><sup>k</sup> — несмещённая и состоятельная оценка α<sub>k</sub> (по ЗБЧ). Центральные: μ̂<sub>k</sub> = (1/n)Σ(X<sub>i</sub> − X̄)<sup>k</sup>.</p>
+<p><b>Прочие характеристики:</b> медиана, квантили, размах X<sub>(n)</sub> − X<sub>(1)</sub>, межквартильный размах IQR, мода, выборочная асимметрия и эксцесс. Медиана и IQR устойчивы к выбросам (робастны), среднее — нет.</p>
+
+<h3>Код</h3>
+<pre><code>import numpy as np
+
+rng = np.random.default_rng(7)
+x = rng.normal(10, 2, 500)
+
+print(x.mean(), np.median(x))
+print(x.var(ddof=0), x.var(ddof=1))     # смещённая / несмещённая
+print(np.percentile(x, [25, 50, 75]), np.ptp(x))
+
+# эмпирическая функция распределения
+def ecdf(sample, t):
+    return (np.sort(sample)[None, :] &lt; np.atleast_1d(t)[:, None]).mean(axis=1)
+
+from scipy import stats
+grid = np.linspace(2, 18, 400)
+for n in (20, 200, 5000):
+    s = rng.normal(10, 2, n)
+    d = np.max(np.abs(ecdf(s, grid) - stats.norm.cdf(grid, 10, 2)))
+    print(n, round(d, 4))               # sup-расстояние падает: Гливенко-Кантелли
+
+# демонстрация смещения: усредняем оценки по 20000 выборкам
+n = 5
+biased = [rng.normal(0, 1, n).var(ddof=0) for _ in range(20000)]
+unbias = [rng.normal(0, 1, n).var(ddof=1) for _ in range(20000)]
+print(round(np.mean(biased), 3), round(np.mean(unbias), 3))   # ~0.8 и ~1.0</code></pre>
+`});
+
+T.push({b:1,n:14,t:"Гистограмма как оценка плотности. Свойства оценок",
+s:"Г. Крамер. Математические методы статистики",
+h:`
+<h3>Гистограмма</h3>
+<div class="def"><b>Построение.</b> Область значений разбивается на интервалы Δ<sub>j</sub> ширины h; на каждом строится столбец высоты</div>
+<div class="f">p̂(x) = n<sub>j</sub> / (n·h),  x ∈ Δ<sub>j</sub></div>
+<p>Нормировка обеспечивает ∫p̂ = 1. Гистограмма — кусочно-постоянная оценка плотности.</p>
+<p><b>Выбор ширины окна h</b> — компромисс «смещение — дисперсия»: малое h даёт «шумную» оценку (большая дисперсия), большое h пересглаживает (большое смещение). Эвристики: правило Стёрджеса k = 1 + log₂n; правило Скотта h = 3.49·s·n<sup>−1/3</sup>; правило Фридмана — Дьякониса h = 2·IQR·n<sup>−1/3</sup> (робастно). Оптимальная скорость h ~ n<sup>−1/3</sup>, MISE ~ n<sup>−2/3</sup>.</p>
+<p><b>Гладкая альтернатива</b> — ядерная оценка Парзена — Розенблатта: p̂(x) = (1/(nh))ΣK((x − X<sub>i</sub>)/h).</p>
+
+<h3>Выборочная функция распределения</h3>
+<p>F<sub>n</sub>(x) — ступенчатая, со скачками 1/n; несмещённая и состоятельная оценка F(x), равномерно сходится (Гливенко — Кантелли). Гистограмма относится к F<sub>n</sub> как плотность к функции распределения.</p>
+
+<h3>Свойства оценок</h3>
+<div class="def"><b>Несмещённость:</b> Eθ̂ = θ при любом n. Смещение bias(θ̂) = Eθ̂ − θ. <b>Асимптотическая несмещённость:</b> Eθ̂<sub>n</sub> → θ.</div>
+<div class="def"><b>Состоятельность:</b> θ̂<sub>n</sub> →<sup>P</sup> θ. Сильная состоятельность — сходимость почти наверное.</div>
+<div class="thm"><b>Достаточное условие состоятельности.</b> Если Eθ̂<sub>n</sub> → θ и Dθ̂<sub>n</sub> → 0, то θ̂<sub>n</sub> состоятельна (следует из неравенства Чебышёва).</div>
+<div class="def"><b>Асимптотическая нормальность:</b> sqrt(n)(θ̂<sub>n</sub> − θ) ⟹ N(0, σ²(θ)). Величина σ²(θ) — асимптотическая дисперсия; чем она меньше, тем оценка эффективнее.</div>
+<p><b>Среднеквадратичная ошибка:</b> MSE = E(θ̂ − θ)² = D θ̂ + bias². Смещённая оценка может иметь меньшую MSE (компромисс смещение — дисперсия; ср. регуляризация в ML).</p>
+<div class="note"><b>Дельта-метод.</b> Если sqrt(n)(θ̂ − θ) ⟹ N(0,σ²) и g дифференцируема, то sqrt(n)(g(θ̂) − g(θ)) ⟹ N(0, (g'(θ))²σ²). Позволяет переносить асимптотическую нормальность на функции от оценок.</div>
+
+<h3>Код</h3>
+<pre><code>import numpy as np
+from scipy import stats
+
+rng = np.random.default_rng(3)
+x = rng.normal(0, 1, 5000)
+
+# гистограмма как оценка плотности (density=True -> нормировка)
+cnt, edges = np.histogram(x, bins='fd', density=True)      # правило Фридмана-Дьякониса
+centers = (edges[:-1] + edges[1:]) / 2
+print(np.round(np.abs(cnt - stats.norm.pdf(centers)).mean(), 4))
+
+# сравнение правил выбора числа бинов
+n = len(x)
+print('Стёрджес', int(1 + np.log2(n)))
+print('Скотт   ', round(3.49 * x.std(ddof=1) * n**(-1/3), 4))
+print('Ф-Д     ', round(2 * stats.iqr(x) * n**(-1/3), 4))
+
+# состоятельность и асимптотическая нормальность выборочного среднего
+for n in (10, 100, 1000, 10000):
+    est = np.array([rng.normal(0, 1, n).mean() for _ in range(4000)])
+    print(n, round(est.mean(), 4), round(est.var()*n, 3))   # var*n -> sigma^2 = 1
+
+# ядерная оценка плотности
+kde = stats.gaussian_kde(x)
+print(round(kde(0.0)[0], 4), round(stats.norm.pdf(0.0), 4))</code></pre>
+`});
+
+T.push({b:1,n:15,t:"Точечные оценки. Методы моментов и максимального правдоподобия",
+s:"Г. Крамер. Математические методы статистики",
+h:`
+<h3>Постановка</h3>
+<p><b>Параметрическая</b> задача: известно семейство {F(x, θ)}, θ ∈ Θ ⊆ ℝ<sup>k</sup>, нужно оценить θ по выборке. <b>Непараметрическая</b>: вид F неизвестен, оцениваются функционалы (F, плотность, моменты, квантили) — F<sub>n</sub>, гистограмма, KDE, бутстрап.</p>
+
+<h3>Метод моментов</h3>
+<p>Теоретические моменты выражаются через параметры; приравниваем их выборочным и решаем систему:</p>
+<div class="f">α<sub>k</sub>(θ₁,…,θ<sub>m</sub>) = (1/n)ΣX<sub>i</sub><sup>k</sup>,  k = 1..m</div>
+<p><b>Плюсы:</b> простота, состоятельность (по ЗБЧ + непрерывность), часто асимптотическая нормальность. <b>Минусы:</b> оценки могут быть смещёнными, неэффективными и даже выходить за область допустимых значений.</p>
+<p>Пример: для U(0,θ): EX = θ/2 ⇒ θ̂ = 2X̄.</p>
+
+<h3>Метод максимального правдоподобия (ММП)</h3>
+<div class="f">L(θ) = Π<sub>i</sub> p(X<sub>i</sub>, θ),  ℓ(θ) = ln L(θ) = Σ ln p(X<sub>i</sub>, θ) → max</div>
+<p>Оценка θ̂ = argmax L; обычно решается уравнение правдоподобия ∂ℓ/∂θ = 0 с проверкой второго условия.</p>
+<p><b>Свойства ММП-оценок</b> (при условиях регулярности): состоятельность; асимптотическая несмещённость; асимптотическая нормальность sqrt(n)(θ̂ − θ) ⟹ N(0, 1/I(θ)); асимптотическая эффективность (достигают границы Рао — Крамера); инвариантность: оценка для g(θ) равна g(θ̂).</p>
+<p>Примеры: N(μ,σ²) → μ̂ = X̄, σ̂² = (1/n)Σ(X<sub>i</sub>−X̄)² (смещена); Pois(λ) → λ̂ = X̄; Exp(λ) → λ̂ = 1/X̄; U(0,θ) → θ̂ = X<sub>(n)</sub> (метод моментов и ММП дают разные ответы).</p>
+
+<h3>Эффективность</h3>
+<div class="def"><b>Информация Фишера:</b> I(θ) = E[(∂ln p(X,θ)/∂θ)²] = −E[∂²ln p/∂θ²]. Для выборки объёма n: I<sub>n</sub>(θ) = n·I(θ).</div>
+<div class="thm"><b>Неравенство Рао — Крамера.</b> Для любой несмещённой оценки в регулярном семействе</div>
+<div class="f">Dθ̂ ≥ 1 / (n·I(θ))</div>
+<p><b>Эффективная оценка</b> — несмещённая оценка, достигающая границы; e(θ̂) = 1/(nI(θ)·Dθ̂) — коэффициент эффективности. <b>Асимптотически эффективная</b> — достигающая границы в пределе при n → ∞.</p>
+<div class="note"><b>Связанные понятия.</b> Достаточная статистика (критерий факторизации Неймана — Фишера); теорема Рао — Блэкуэлла — Колмогорова: усреднение оценки по достаточной статистике не увеличивает дисперсию; полнота + достаточность ⇒ единственная оптимальная несмещённая оценка (теорема Лемана — Шеффе). ММП = минимизация кросс-энтропии; MSE-функция потерь в регрессии = ММП при нормальных ошибках.</div>
+
+<h3>Код</h3>
+<pre><code>import numpy as np
+from scipy import optimize, stats
+
+rng = np.random.default_rng(11)
+x = rng.gamma(shape=3.0, scale=2.0, size=5000)     # истинные k=3, theta=2
+
+# 1) метод моментов для гамма: EX = k*th, DX = k*th^2
+m1, m2 = x.mean(), x.var(ddof=1)
+th_mm, k_mm = m2/m1, m1**2/m2
+print('моменты :', round(k_mm, 3), round(th_mm, 3))
+
+# 2) ММП: минимизируем -log L
+def nll(p):
+    k, th = p
+    if k &lt;= 0 or th &lt;= 0: return np.inf
+    return -stats.gamma.logpdf(x, a=k, scale=th).sum()
+
+res = optimize.minimize(nll, [1.0, 1.0], method='Nelder-Mead')
+print('ММП     :', np.round(res.x, 3))
+
+# 3) ММП вручную для Пуассона: lambda = среднее
+y = rng.poisson(4.0, 10000)
+print('Пуассон :', y.mean())
+
+# 4) граница Рао-Крамера для N(mu, 1): D >= 1/n, X_bar её достигает
+n = 50
+est = np.array([rng.normal(0, 1, n).mean() for _ in range(50000)])
+print(round(est.var(), 5), round(1/n, 5))</code></pre>
+`});
+
+T.push({b:1,n:16,t:"Проверка гипотез. Ошибки I и II рода, критерии",
+s:"Г. Крамер. Математические методы статистики",
+h:`
+<h3>Постановка</h3>
+<div class="def"><b>Гипотеза</b> — утверждение о распределении. H₀ — основная (нулевая), H₁ — альтернативная. Гипотеза <b>простая</b>, если однозначно задаёт распределение, иначе <b>сложная</b>. <b>Критерий</b> — правило, разбивающее выборочное пространство на критическую область S (отвергаем H₀) и её дополнение.</div>
+
+<h3>Ошибки I и II рода</h3>
+<table>
+<tr><th></th><th>H₀ верна</th><th>H₀ неверна</th></tr>
+<tr><td>H₀ принята</td><td>верное решение (1−α)</td><td><b>ошибка II рода</b>, вероятность β</td></tr>
+<tr><td>H₀ отвергнута</td><td><b>ошибка I рода</b>, вероятность α</td><td>верное решение, мощность 1−β</td></tr>
+</table>
+<p><b>Уровень значимости</b> α = P(отвергнуть H₀ | H₀ верна) — задаётся заранее (0.05, 0.01). <b>Мощность</b> W = 1 − β = P(отвергнуть H₀ | H₁ верна). При фиксированном n уменьшение α увеличивает β; одновременно снизить обе ошибки можно только увеличив объём выборки.</p>
+<div class="thm"><b>Лемма Неймана — Пирсона.</b> Для двух простых гипотез наиболее мощный критерий уровня α основан на отношении правдоподобия: отвергаем H₀, если L(x,θ₁)/L(x,θ₀) &gt; c.</div>
+<p><b>p-value</b> — вероятность при верной H₀ получить статистику не менее экстремальную, чем наблюдённая. Правило: p ≤ α ⇒ отвергаем H₀. p-value не есть вероятность истинности H₀.</p>
+
+<h3>Доверительные интервалы</h3>
+<div class="def"><b>Доверительный интервал (область)</b> уровня доверия γ = 1 − α: случайный интервал (θ<sub>1</sub>, θ<sub>2</sub>), накрывающий истинный θ с вероятностью γ.</div>
+<div class="f">Для N(μ, σ²), σ известна: X̄ ± z<sub>1−α/2</sub>·σ/sqrt(n)</div>
+<div class="f">σ неизвестна: X̄ ± t<sub>1−α/2, n−1</sub>·S/sqrt(n)</div>
+<p><b>Двойственность:</b> H₀: θ = θ₀ отвергается на уровне α ⟺ θ₀ не попадает в доверительный интервал уровня 1 − α.</p>
+
+<h3>Основные критерии</h3>
+<table>
+<tr><th>Критерий</th><th>Задача</th><th>Статистика</th></tr>
+<tr><td>Z-тест</td><td>среднее при известной σ</td><td>Z = (X̄ − μ₀)sqrt(n)/σ ~ N(0,1)</td></tr>
+<tr><td>t-тест Стьюдента</td><td>среднее при неизвестной σ; сравнение двух выборок</td><td>T = (X̄ − μ₀)sqrt(n)/S ~ t(n−1)</td></tr>
+<tr><td>F-тест (Фишера)</td><td>равенство дисперсий, значимость регрессии</td><td>F = S₁²/S₂² ~ F(n₁−1, n₂−1)</td></tr>
+<tr><td>χ² Пирсона</td><td>согласие с распределением, независимость в таблице сопряжённости</td><td>Σ(n<sub>i</sub> − np<sub>i</sub>)²/(np<sub>i</sub>) ~ χ²(k−1−m)</td></tr>
+<tr><td>Колмогорова — Смирнова</td><td>согласие с непрерывным распределением</td><td>D = sup|F<sub>n</sub> − F|</td></tr>
+<tr><td>Манна — Уитни, Вилкоксон</td><td>непараметрическое сравнение</td><td>ранговые статистики</td></tr>
+</table>
+<div class="note"><b>Множественные сравнения.</b> При m тестах вероятность хотя бы одной ошибки I рода растёт: 1 − (1−α)<sup>m</sup>. Поправки: Бонферрони (α/m), Холма, контроль FDR (Бенджамини — Хохберг). Актуально в A/B-тестировании.</div>
+
+<h3>Код</h3>
+<pre><code>import numpy as np
+from scipy import stats
+
+rng = np.random.default_rng(5)
+a = rng.normal(10.0, 2.0, 60)
+b = rng.normal(10.8, 2.0, 60)
+
+# одновыборочный t-тест: H0: mu = 10
+t, p = stats.ttest_1samp(a, 10.0)
+print(round(t, 3), round(p, 4))
+
+# двухвыборочный t-тест (Уэлч)
+print(stats.ttest_ind(a, b, equal_var=False))
+
+# доверительный интервал 95% для среднего
+n, m, s = len(a), a.mean(), a.std(ddof=1)
+tq = stats.t.ppf(0.975, n-1)
+print(round(m - tq*s/np.sqrt(n), 3), round(m + tq*s/np.sqrt(n), 3))
+
+# хи-квадрат: согласие с равномерным распределением игральной кости
+obs = np.array([18, 22, 16, 25, 19, 20])
+print(stats.chisquare(obs))
+
+# Колмогоров - Смирнов
+print(stats.kstest(a, 'norm', args=(10, 2)))
+
+# эмпирическая ошибка I рода при alpha = 0.05
+rej = sum(stats.ttest_1samp(rng.normal(0, 1, 30), 0.0).pvalue &lt; 0.05
+          for _ in range(20000))
+print(rej / 20000)          # ~0.05
+
+# поправка Бонферрони
+pvals = np.array([0.01, 0.04, 0.03, 0.2])
+print(pvals &lt; 0.05 / len(pvals))</code></pre>
+`});
+
+T.push({b:1,n:17,t:"Оценка сложности алгоритмов: сортировка и поиск",
+s:"Д. Кнут. Искусство программирования; Р. Стивенс. Алгоритмы",
+h:`
+<h3>Асимптотические обозначения</h3>
+<ul>
+<li><b>O(g)</b> — верхняя оценка: f(n) ≤ C·g(n) при n ≥ n₀.</li>
+<li><b>Ω(g)</b> — нижняя оценка: f(n) ≥ C·g(n).</li>
+<li><b>Θ(g)</b> — точная оценка: одновременно O(g) и Ω(g).</li>
+<li><b>o(g)</b> — строго меньший порядок: f/g → 0.</li>
+</ul>
+<p>Различают сложность в лучшем, среднем и худшем случае, а также <b>амортизированную</b> (усреднённую по последовательности операций — например, push в динамический массив: O(1) амортизированно при удвоении ёмкости). Отдельно оценивается память (in-place = O(1) дополнительной памяти).</p>
+<p>Иерархия роста: O(1) &lt; O(log n) &lt; O(sqrt n) &lt; O(n) &lt; O(n log n) &lt; O(n²) &lt; O(n³) &lt; O(2ⁿ) &lt; O(n!).</p>
+<div class="thm"><b>Основная теорема о рекуррентных соотношениях (master theorem).</b> Для T(n) = a·T(n/b) + f(n), где сравнивается f(n) с n<sup>log<sub>b</sub>a</sup>:<br>
+1) f растёт медленнее ⇒ T = Θ(n<sup>log<sub>b</sub>a</sup>);<br>
+2) f = Θ(n<sup>log<sub>b</sub>a</sup>) ⇒ T = Θ(n<sup>log<sub>b</sub>a</sup>·log n);<br>
+3) f растёт быстрее (+ условие регулярности) ⇒ T = Θ(f(n)).<br>
+Пример: сортировка слиянием T(n) = 2T(n/2) + Θ(n) ⇒ Θ(n log n); бинарный поиск T(n) = T(n/2) + Θ(1) ⇒ Θ(log n).</div>
+
+<h3>Сортировки</h3>
+<table>
+<tr><th>Алгоритм</th><th>Лучший</th><th>Средний</th><th>Худший</th><th>Память</th><th>Устойчивость</th></tr>
+<tr><td>Пузырьком / вставками</td><td>O(n)</td><td>O(n²)</td><td>O(n²)</td><td>O(1)</td><td>да</td></tr>
+<tr><td>Выбором</td><td>O(n²)</td><td>O(n²)</td><td>O(n²)</td><td>O(1)</td><td>нет</td></tr>
+<tr><td>Слиянием (merge sort)</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n)</td><td>да</td></tr>
+<tr><td>Быстрая (quicksort)</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n²)</td><td>O(log n)</td><td>нет</td></tr>
+<tr><td>Пирамидальная (heapsort)</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n log n)</td><td>O(1)</td><td>нет</td></tr>
+<tr><td>Подсчётом / поразрядная</td><td>O(n+k)</td><td>O(n+k)</td><td>O(n·d)</td><td>O(n+k)</td><td>да</td></tr>
+</table>
+<div class="thm"><b>Нижняя оценка для сортировок сравнениями: Ω(n log n).</b> Дерево решений с n! листьями имеет высоту не менее log₂(n!) = Θ(n log n) (формула Стирлинга). Обойти границу можно только не используя попарные сравнения (сортировка подсчётом, поразрядная).</div>
+
+<h3>Поиск</h3>
+<ul>
+<li><b>Линейный:</b> O(n), работает на неупорядоченных данных.</li>
+<li><b>Бинарный:</b> O(log n), требует отсортированного массива с произвольным доступом. Инвариант: ответ всегда в полуинтервале [lo, hi).</li>
+<li><b>Интерполяционный:</b> O(log log n) в среднем на равномерных данных, O(n) в худшем.</li>
+<li><b>Хеш-таблица:</b> O(1) в среднем, O(n) в худшем.</li>
+<li><b>Сбалансированное дерево поиска:</b> O(log n) гарантированно, поддерживает диапазонные запросы.</li>
+</ul>
+<div class="note"><b>Практика.</b> В реальных библиотеках используются гибриды: Timsort (Python, Java) — слияние + вставки, использует уже упорядоченные участки, O(n) на почти отсортированных данных; introsort (C++ std::sort) — quicksort с переключением на heapsort при глубокой рекурсии, что гарантирует O(n log n).</div>
+
+<h3>Код</h3>
+<pre><code>def binary_search(a, target):            # O(log n), инвариант [lo, hi)
+    lo, hi = 0, len(a)
+    while lo &lt; hi:
+        mid = (lo + hi) // 2
+        if a[mid] == target: return mid
+        if a[mid] &lt; target:  lo = mid + 1
+        else:                hi = mid
+    return -1
+
+def merge_sort(a):                       # T(n) = 2T(n/2) + O(n) = O(n log n)
+    if len(a) &lt;= 1: return a
+    mid = len(a) // 2
+    L, R = merge_sort(a[:mid]), merge_sort(a[mid:])
+    res, i, j = [], 0, 0
+    while i &lt; len(L) and j &lt; len(R):
+        if L[i] &lt;= R[j]: res.append(L[i]); i += 1
+        else:            res.append(R[j]); j += 1
+    return res + L[i:] + R[j:]
+
+def quick_sort(a):                       # среднее O(n log n), худшее O(n^2)
+    if len(a) &lt;= 1: return a
+    p = a[len(a) // 2]
+    return (quick_sort([x for x in a if x &lt; p]) +
+            [x for x in a if x == p] +
+            quick_sort([x for x in a if x &gt; p]))
+
+# эмпирическая проверка асимптотики
+import random, time
+for n in (10_000, 20_000, 40_000):
+    data = [random.random() for _ in range(n)]
+    t0 = time.perf_counter(); merge_sort(data)
+    print(n, round(time.perf_counter() - t0, 3))   # рост чуть быстрее линейного</code></pre>
+`});
+
+/* ==================== БЛОК 2 — ИНФОРМАЦИОННЫЕ ТЕХНОЛОГИИ ==================== */
+
+T.push({b:2,n:1,t:"Высокоуровневые языки программирования. Компиляторы и интерпретаторы",
+s:"Б. Страуструп. Язык программирования C++",
+h:`
+<h3>Уровни языков</h3>
+<p><b>Машинный код</b> → <b>ассемблер</b> (мнемоники команд, 1:1 с машинными) → <b>высокоуровневые языки</b> (абстракции: переменные, типы, функции, ООП; переносимость между архитектурами).</p>
+
+<h3>Базовые конструкции и их реализация</h3>
+<ul>
+<li><b>Переменная</b> — именованная область памяти. Компилятор сопоставляет имени адрес (смещение относительно указателя стека rbp) или регистр. Тип определяет размер и интерпретацию битов.</li>
+<li><b>Условие</b> — команда сравнения cmp, выставляющая флаги, и условный переход (jz, jg и т.д.).</li>
+<li><b>Цикл</b> — тело + условный переход назад по метке. Компилятор применяет развёртку (unrolling), вынос инвариантов.</li>
+<li><b>Массив</b> — непрерывный блок памяти; a[i] превращается в адресную арифметику base + i·sizeof(T). Отсюда O(1) доступ и отсутствие проверки границ в C/C++.</li>
+<li><b>Функция</b> — вызов call кладёт адрес возврата на стек; создаётся <b>кадр стека</b> (аргументы, локальные переменные, сохранённые регистры); соглашение о вызовах (calling convention) определяет, что идёт в регистрах, что в стеке; ret возвращает управление.</li>
+<li><b>Рекурсия</b> — каждый вызов создаёт новый кадр; глубина ограничена размером стека (переполнение = stack overflow). Хвостовая рекурсия может быть преобразована компилятором в цикл (TCO).</li>
+</ul>
+
+<h3>Компиляторы и интерпретаторы</h3>
+<table>
+<tr><th></th><th>Компилятор</th><th>Интерпретатор</th></tr>
+<tr><td>Момент трансляции</td><td>заранее, целиком (AOT)</td><td>во время исполнения, по частям</td></tr>
+<tr><td>Результат</td><td>исполняемый файл</td><td>исполнение напрямую</td></tr>
+<tr><td>Скорость исполнения</td><td>высокая</td><td>ниже в 10–100 раз</td></tr>
+<tr><td>Ошибки</td><td>много ловится статически</td><td>обнаруживаются в рантайме</td></tr>
+<tr><td>Переносимость</td><td>нужна сборка под платформу</td><td>переносим исходник</td></tr>
+<tr><td>Примеры</td><td>C, C++, Rust, Go</td><td>Python, Ruby, JS (частично)</td></tr>
+</table>
+<p><b>Этапы компиляции:</b> препроцессор → лексический анализ (токены) → синтаксический анализ (AST) → семантический анализ (типы) → генерация промежуточного кода (IR) → оптимизация → генерация машинного кода → ассемблирование → компоновка (линковка) статических и динамических библиотек.</p>
+<div class="note"><b>Гибриды.</b> Java и C# компилируются в байт-код, исполняемый виртуальной машиной с JIT-компиляцией горячих участков в машинный код. CPython транслирует исходник в байт-код (.pyc) и исполняет его в стековой виртуальной машине — это интерпретация байт-кода, а не машинного кода. PyPy добавляет JIT.</div>
+
+<h3>Код</h3>
+<pre><code>// C++: цикл, массив, функция, рекурсия
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+
+int factorial(int n) {                 // рекурсия: новый кадр стека на вызов
+    return (n &lt;= 1) ? 1 : n * factorial(n - 1);
+}
+
+int main() {
+    std::vector&lt;int&gt; a{5, 3, 8, 1};
+    int sum = 0;
+    for (size_t i = 0; i &lt; a.size(); ++i) {     // a[i] -> base + i*4
+        if (a[i] % 2 == 1) sum += a[i];         // cmp + условный переход
+    }
+    std::cout &lt;&lt; sum &lt;&lt; " " &lt;&lt; factorial(5) &lt;&lt; std::endl;
+    return 0;
+}
+// g++ -O2 -S prog.cpp   -> посмотреть сгенерированный ассемблер</code></pre>
+<pre><code># Python: тот же алгоритм и просмотр байт-кода
+import dis
+
+def total(a):
+    s = 0
+    for x in a:
+        if x % 2:
+            s += x
+    return s
+
+dis.dis(total)          # LOAD_FAST / BINARY_OP / POP_JUMP_IF_FALSE ...
+print(total([5, 3, 8, 1]))</code></pre>
+`});
+
+T.push({b:2,n:2,t:"Python: память, копирование, скалярные типы, приведение типов",
+s:"М. Лутц. Изучаем Python",
+h:`
+<h3>Модель памяти</h3>
+<p>В Python <b>всё — объект</b>. Переменная не «хранит значение», а является именем, связанным со ссылкой на объект в куче. Объект содержит счётчик ссылок, тип и значение. Присваивание <code>b = a</code> копирует ссылку, а не объект.</p>
+<p><b>Управление памятью:</b> подсчёт ссылок (reference counting) + сборщик циклических ссылок (модуль gc). <code>id(x)</code> — адрес объекта, <code>is</code> сравнивает идентичность, <code>==</code> — значения.</p>
+<div class="note"><b>Кэширование малых объектов.</b> CPython предварительно создаёт int от −5 до 256 и интернирует короткие строки-идентификаторы: <code>a = 256; b = 256; a is b</code> → True, но <code>a = 257; b = 257; a is b</code> → False (в интерактивном режиме). Поэтому числа и строки нужно сравнивать через ==.</div>
+
+<h3>Изменяемость и копирование</h3>
+<table>
+<tr><th>Неизменяемые (immutable)</th><th>Изменяемые (mutable)</th></tr>
+<tr><td>int, float, complex, bool, str, bytes, tuple, frozenset</td><td>list, dict, set, bytearray, пользовательские классы</td></tr>
+</table>
+<ul>
+<li><code>b = a</code> — новая ссылка на тот же объект.</li>
+<li><code>copy.copy(a)</code> — поверхностная копия: новый контейнер, но вложенные объекты общие.</li>
+<li><code>copy.deepcopy(a)</code> — глубокая копия всего дерева объектов (корректно обрабатывает циклы).</li>
+</ul>
+
+<h3>Скалярные типы</h3>
+<ul>
+<li><b>int</b> — целое произвольной точности (длинная арифметика, ограничено памятью).</li>
+<li><b>float</b> — двойная точность IEEE 754; накапливается погрешность: 0.1 + 0.2 != 0.3. Для денег — <code>decimal.Decimal</code>, для дробей — <code>fractions.Fraction</code>.</li>
+<li><b>bool</b> — подкласс int: True == 1, False == 0.</li>
+<li><b>complex</b>, <b>NoneType</b>.</li>
+</ul>
+<p><b>Деление:</b> <code>/</code> — всегда float; <code>//</code> — floor division (округление вниз, в том числе для отрицательных: −7 // 2 = −4); <code>%</code> — остаток со знаком делителя.</p>
+
+<h3>Приведение типов</h3>
+<p><b>Явное:</b> int(), float(), str(), bool(), list(), tuple(). <b>Неявное:</b> только расширение числовых типов bool → int → float → complex. Строка и число автоматически не складываются (в отличие от JavaScript) — строгая динамическая типизация.</p>
+<p><b>Приведение к bool:</b> ложны 0, 0.0, '', [], {}, set(), None; всё остальное истинно (протокол <code>__bool__</code> / <code>__len__</code>).</p>
+
+<h3>Приоритеты операций (по убыванию)</h3>
+<p><code>()</code> · <code>x[i]</code>, <code>f()</code>, <code>x.attr</code> · <code>**</code> (правоассоциативна) · унарные <code>+x -x ~x</code> · <code>* / // %</code> · <code>+ -</code> · <code>&lt;&lt; &gt;&gt;</code> · <code>&amp;</code> · <code>^</code> · <code>|</code> · сравнения, <code>in</code>, <code>is</code>, <code>==</code> · <code>not</code> · <code>and</code> · <code>or</code> · тернарный <code>a if c else b</code> · <code>lambda</code> · <code>:=</code></p>
+<p>Особенности: цепочки сравнений <code>1 &lt; x &lt; 10</code> работают как конъюнкция; <code>and</code>/<code>or</code> ленивы и возвращают операнд, а не bool; <code>-2 ** 2 == -4</code> (степень сильнее унарного минуса).</p>
+
+<h3>Код</h3>
+<pre><code>import copy, sys
+
+a = [1, [2, 3]]
+b = a                       # та же ссылка
+c = copy.copy(a)            # поверхностная копия
+d = copy.deepcopy(a)        # глубокая копия
+
+a[1].append(99)
+print(b, c, d)              # b и c видят 99, d - нет
+print(a is b, a is c, a == c)         # True False True
+print(sys.getrefcount(a))
+
+x = 256; y = 256; print(x is y)       # True  (кэш малых int)
+x = 1000; y = 1000; print(x is y)     # обычно False
+
+print(0.1 + 0.2 == 0.3, round(0.1 + 0.2, 10) == 0.3)
+from decimal import Decimal
+print(Decimal('0.1') + Decimal('0.2') == Decimal('0.3'))   # True
+
+print(-7 // 2, -7 % 2, 7 // -2)       # -4 1 -4
+print(int('101', 2), float('3.14'), bool([]), str(42) + '!')
+print(-2 ** 2, (-2) ** 2)             # -4 4
+print(0 or 'default', 'a' and 'b')    # ленивые операторы</code></pre>
+`});
+
+T.push({b:2,n:3,t:"Строки в Python. Форматный ввод/вывод",
+s:"М. Лутц. Изучаем Python",
+h:`
+<h3>Строки</h3>
+<p><code>str</code> — <b>неизменяемая</b> последовательность Unicode-символов. Любая «модификация» создаёт новый объект. <code>bytes</code> — неизменяемая последовательность байтов; переход через <code>s.encode('utf-8')</code> и <code>b.decode('utf-8')</code>.</p>
+<p>Литералы: одинарные, двойные, тройные кавычки (многострочные), r-строки (без обработки экранирования, удобны для регулярных выражений), f-строки, b-строки.</p>
+
+<h3>Операции</h3>
+<ul>
+<li>Конкатенация <code>+</code>, повторение <code>*</code>, вхождение <code>in</code>, длина <code>len</code>.</li>
+<li>Индексация и срезы <code>s[start:stop:step]</code> (отрицательные индексы от конца, <code>s[::-1]</code> — разворот).</li>
+<li>Итерация по символам; лексикографическое сравнение по кодовым точкам.</li>
+</ul>
+<p><b>Основные методы:</b> upper/lower/title/capitalize, strip/lstrip/rstrip, split/rsplit/splitlines, join, replace, find/rfind (−1 если нет), index (ошибка если нет), count, startswith/endswith, isdigit/isalpha/isalnum/isspace, center/ljust/rjust/zfill, partition, translate, removeprefix/removesuffix.</p>
+<div class="note"><b>Эффективность.</b> Склейка в цикле <code>s += x</code> — O(n²), потому что каждый раз создаётся новая строка. Правильно: собрать в список и вызвать <code>''.join(parts)</code> — O(n).</div>
+
+<h3>str() и repr()</h3>
+<p><code>str(obj)</code> — «человекочитаемое» представление (<code>__str__</code>), используется print. <code>repr(obj)</code> — однозначное, по возможности пригодное для eval (<code>__repr__</code>), выводится в REPL и внутри контейнеров. Если <code>__str__</code> не определён, используется <code>__repr__</code>.</p>
+
+<h3>Форматирование</h3>
+<ol>
+<li><b>%-оператор</b> (старый стиль): <code>'%s имеет %d' % (name, n)</code>.</li>
+<li><b>str.format()</b>: <code>'{0} {name:&gt;10.3f}'.format(a, name=x)</code>.</li>
+<li><b>f-строки</b> (рекомендуется, с 3.6): <code>f'{x:.2f}'</code>, поддерживают выражения и отладочный синтаксис <code>f'{x=}'</code>.</li>
+</ol>
+<p><b>Спецификация формата:</b> <code>[[fill]align][sign][#][0][width][,][.precision][type]</code></p>
+<table>
+<tr><th>Поле</th><th>Значения</th></tr>
+<tr><td>align</td><td><code>&lt;</code> влево, <code>&gt;</code> вправо, <code>^</code> по центру, <code>=</code> знак слева от заполнителя</td></tr>
+<tr><td>sign</td><td><code>+</code> всегда знак, <code>-</code> только минус, пробел</td></tr>
+<tr><td>width / precision</td><td>минимальная ширина поля / число знаков после точки (для str — обрезка)</td></tr>
+<tr><td>type</td><td><code>d</code> целое, <code>f</code> фикс. точка, <code>e</code> экспонента, <code>g</code> общий, <code>%</code> проценты, <code>b o x X</code> системы счисления, <code>s</code> строка</td></tr>
+<tr><td>разделитель</td><td><code>,</code> или <code>_</code> — группировка разрядов</td></tr>
+</table>
+
+<h3>Ввод/вывод</h3>
+<p><code>input(prompt)</code> возвращает строку без символа перевода строки. Разбор нескольких чисел: <code>a, b = map(int, input().split())</code>. Массив: <code>arr = list(map(int, input().split()))</code>. Для больших объёмов — <code>sys.stdin</code> и <code>sys.stdout.write</code>. Вывод: <code>print(*args, sep=' ', end='\\n', file=sys.stdout, flush=False)</code>.</p>
+
+<h3>Код</h3>
+<pre><code>import sys
+
+s = "  Hello, World  "
+print(s.strip().lower().replace(',', ';'))
+print(s.strip().split(', '), '-'.join(['a', 'b', 'c']))
+print(s[2:7], s.strip()[::-1], len(s))
+
+name, x, n = "Пи", 3.14159, 1234567
+print(f"{name}: {x:.3f} | {x:&gt;10.2f} | {x:^12.1f}")
+print(f"{n:,} | {n:_} | {255:b} | {255:#x} | {0.1234:.1%}")
+print(f"{x=}")                      # отладочный вывод: x=3.14159
+print("%s = %05.2f" % (name, x))    # старый стиль
+print("{1} {0}".format('b', 'a'))   # позиционные аргументы
+
+class P:
+    def __init__(self, v): self.v = v
+    def __repr__(self): return f"P({self.v!r})"
+    def __str__(self):   return f"точка {self.v}"
+p = P(5); print(str(p), repr(p), [p])
+
+# быстрый ввод больших объёмов данных
+data = sys.stdin.read().split()
+# a, b = map(int, input().split())
+
+parts = [str(i) for i in range(5)]  # правильная склейка: O(n)
+print(''.join(parts))</code></pre>
+`});
+
+T.push({b:2,n:4,t:"Циклы и условия в Python. Функция range()",
+s:"М. Лутц. Изучаем Python",
+h:`
+<h3>Условные конструкции</h3>
+<pre><code>if x &gt; 0:
+    sign = 1
+elif x &lt; 0:
+    sign = -1
+else:
+    sign = 0
+
+sign = 1 if x &gt; 0 else (-1 if x &lt; 0 else 0)    # тернарный оператор</code></pre>
+<p>Блоки задаются <b>отступами</b> (по соглашению 4 пробела). Условие приводится к bool по правилам истинности. Операторы <code>and</code>/<code>or</code> ленивы; цепочки сравнений <code>0 &lt;= x &lt; n</code> допустимы.</p>
+<p><b>match/case</b> (с Python 3.10) — структурное сопоставление с образцом, а не просто switch: поддерживает распаковку, охранные условия (guard), классы.</p>
+
+<h3>Цикл while</h3>
+<pre><code>i = 0
+while i &lt; 5:
+    i += 1
+    if i == 2: continue     # к следующей итерации
+    if i == 4: break        # выход, блок else пропускается
+else:
+    print("завершён без break")</code></pre>
+
+<h3>Цикл for</h3>
+<p>Это цикл <b>по итерируемому объекту</b>, а не по счётчику: <code>for x in iterable</code>. Работает со списками, строками, словарями, файлами, генераторами. Полезные спутники: <code>enumerate(it, start=0)</code>, <code>zip(a, b)</code>, <code>reversed()</code>, <code>sorted()</code>, <code>itertools</code>.</p>
+<div class="note"><b>Конструкция for/else и while/else:</b> блок <code>else</code> выполняется, если цикл завершился <b>без</b> <code>break</code>. Удобно для поиска: «не нашли — сообщить».</div>
+
+<h3>Функция range()</h3>
+<div class="f">range(stop) | range(start, stop) | range(start, stop, step)</div>
+<ul>
+<li>Полуинтервал: start включается, stop — нет. Шаг может быть отрицательным, нулевым быть не может.</li>
+<li>Это <b>ленивый неизменяемый последовательный объект</b>, а не список: занимает O(1) памяти независимо от длины, поддерживает len, индексацию, срезы и <code>in</code> за O(1) (арифметическая проверка).</li>
+<li>Аргументы только целые. Для вещественного шага — <code>numpy.arange</code>/<code>linspace</code> или генератор.</li>
+</ul>
+<pre><code>print(list(range(5)))            # [0, 1, 2, 3, 4]
+print(list(range(2, 11, 3)))     # [2, 5, 8]
+print(list(range(10, 0, -2)))    # [10, 8, 6, 4, 2]
+print(len(range(10**12)), 10**11 in range(10**12))   # мгновенно</code></pre>
+
+<h3>Код</h3>
+<pre><code>from itertools import product
+
+# for/else: поиск делителя (проверка простоты)
+n = 91
+for d in range(2, int(n**0.5) + 1):
+    if n % d == 0:
+        print(n, "делится на", d)
+        break
+else:
+    print(n, "простое")
+
+# enumerate и zip
+names, ages = ['Аня', 'Борис'], [23, 31]
+for i, (nm, ag) in enumerate(zip(names, ages), start=1):
+    print(i, nm, ag)
+
+# вложенные циклы и генераторные выражения
+print([[i * j for j in range(1, 4)] for i in range(1, 4)])
+print(sum(i for i in range(1, 101) if i % 3 == 0))
+
+# замена вложенных циклов на product
+for i, j in product(range(2), repeat=2):
+    print(i, j, end='; ')
+print()
+
+# match/case (Python 3.10+)
+def kind(v):
+    match v:
+        case 0:                  return "ноль"
+        case int() | float():    return "число"
+        case [x, y]:             return f"пара {x},{y}"
+        case {'id': i}:          return f"словарь id={i}"
+        case _:                  return "другое"
+print(kind(0), kind(2.5), kind([1, 2]), kind({'id': 7}))</code></pre>
+`});
+
+T.push({b:2,n:5,t:"Списки, кортежи, словари, множества",
+s:"М. Лутц. Изучаем Python",
+h:`
+<h3>Сравнение коллекций</h3>
+<table>
+<tr><th>Тип</th><th>Изменяемость</th><th>Порядок</th><th>Дубликаты</th><th>Ключ/элемент</th><th>Назначение</th></tr>
+<tr><td>list</td><td>да</td><td>да</td><td>да</td><td>любой</td><td>упорядоченная последовательность</td></tr>
+<tr><td>tuple</td><td>нет</td><td>да</td><td>да</td><td>любой</td><td>неизменяемая запись, ключ словаря</td></tr>
+<tr><td>dict</td><td>да</td><td>порядок вставки (3.7+)</td><td>ключи уникальны</td><td>хешируемый ключ</td><td>отображение ключ → значение</td></tr>
+<tr><td>set</td><td>да</td><td>нет</td><td>нет</td><td>хешируемый</td><td>уникальность, теоретико-множественные операции</td></tr>
+</table>
+
+<h3>Список (list)</h3>
+<p>Динамический массив указателей; ёмкость увеличивается с запасом, поэтому append амортизированно O(1).</p>
+<p><b>Методы:</b> append, extend, insert(i,x), remove(x), pop(i), index, count, sort(key=, reverse=), reverse, copy, clear.</p>
+<table><tr><th>Операция</th><th>Сложность</th></tr>
+<tr><td>l[i], l[i] = v, len</td><td>O(1)</td></tr>
+<tr><td>append, pop()</td><td>O(1) амортизированно</td></tr>
+<tr><td>insert(0,x), pop(0), remove, del</td><td>O(n)</td></tr>
+<tr><td>x in l, min, max</td><td>O(n)</td></tr>
+<tr><td>sort (Timsort)</td><td>O(n log n)</td></tr></table>
+
+<h3>Кортеж (tuple)</h3>
+<p>Неизменяемый и хешируемый (если все элементы хешируемы) — может быть ключом словаря и элементом множества. Меньше памяти, быстрее создаётся. Используется для распаковки, возврата нескольких значений, именованных записей (<code>collections.namedtuple</code>, <code>typing.NamedTuple</code>). Кортеж из одного элемента: <code>(x,)</code>.</p>
+
+<h3>Словарь (dict)</h3>
+<p>Хеш-таблица; поиск, вставка, удаление — O(1) в среднем. Ключ обязан быть хешируемым (реализовывать <code>__hash__</code> и <code>__eq__</code>), поэтому список ключом быть не может, а кортеж — может. С 3.7 гарантирован порядок вставки; с 3.6 компактная реализация экономит память.</p>
+<p><b>Методы:</b> keys, values, items, get(k, default), setdefault, update, pop, popitem, <code>|</code> (объединение, 3.9+). Специализации: <code>defaultdict</code>, <code>Counter</code>, <code>OrderedDict</code>.</p>
+
+<h3>Множество (set)</h3>
+<p>Хеш-таблица без значений. Операции: <code>|</code> объединение, <code>&amp;</code> пересечение, <code>-</code> разность, <code>^</code> симметрическая разность, <code>&lt;=</code> подмножество. Методы: add, discard (без ошибки), remove (с ошибкой), pop, update. <code>frozenset</code> — неизменяемая и хешируемая версия.</p>
+
+<h3>Код</h3>
+<pre><code>from collections import Counter, defaultdict, deque
+
+lst = [5, 3, 8, 3]
+lst.append(1); lst.extend([7]); lst.sort(reverse=True)
+print(lst, lst[1:3], lst[::-1], lst.count(3))
+print(sorted(['bb', 'a', 'ccc'], key=len))          # сортировка по ключу
+
+t = (1, 'a', (2, 3))
+d = {t: 'кортеж как ключ'}                          # хешируем
+x, *rest = [1, 2, 3]; print(x, rest)                # распаковка
+
+d = {'a': 1, 'b': 2}
+d['c'] = 3; d.update(b=20)
+print(d.get('z', 0), list(d.items()), {k: v*2 for k, v in d.items()})
+
+cnt = Counter('абракадабра')
+print(cnt.most_common(2))
+dd = defaultdict(list); dd['ключ'].append(1); print(dd)
+
+A, B = {1, 2, 3}, {3, 4}
+print(A | B, A &amp; B, A - B, A ^ B, {1, 2} &lt;= A)
+print(list(dict.fromkeys([3, 1, 3, 2])))            # уникальные с порядком
+
+dq = deque([1, 2, 3])                               # O(1) с обоих концов
+dq.appendleft(0); dq.pop(); print(dq)</code></pre>
+`});
+
+T.push({b:2,n:6,t:"Функции в Python. Области видимости, рекурсия, lambda",
+s:"М. Лутц. Изучаем Python",
+h:`
+<h3>Определение и аргументы</h3>
+<pre><code>def f(a, b=10, *args, key=None, **kwargs) -&gt; int:
+    """Документирующая строка."""
+    return a + b
+
+f(1)                 # позиционный
+f(1, b=5)            # именованный
+f(1, 2, 3, 4, key='k', extra=True)</code></pre>
+<ul>
+<li><code>*args</code> — кортеж лишних позиционных, <code>**kwargs</code> — словарь именованных.</li>
+<li><code>/</code> и <code>*</code> в сигнатуре задают только-позиционные и только-именованные параметры: <code>def f(a, /, b, *, c)</code>.</li>
+<li>Аргументы передаются по <b>ссылке на объект</b>: изменяемый объект можно изменить внутри функции, переприсваивание имени наружу не видно.</li>
+<li>Функции — объекты первого класса: их можно передавать, возвращать, хранить в коллекциях.</li>
+</ul>
+<div class="note"><b>Ловушка изменяемого значения по умолчанию.</b> <code>def f(x, acc=[])</code> — список создаётся один раз при определении функции и разделяется между вызовами. Правильно: <code>def f(x, acc=None): acc = [] if acc is None else acc</code>.</div>
+
+<h3>Области видимости: правило LEGB</h3>
+<p><b>L</b>ocal → <b>E</b>nclosing (объемлющая функция) → <b>G</b>lobal (модуль) → <b>B</b>uilt-in. Поиск имени идёт в этом порядке.</p>
+<ul>
+<li><code>global x</code> — присваивание меняет глобальную переменную модуля.</li>
+<li><code>nonlocal x</code> — присваивание меняет переменную объемлющей функции (для замыканий).</li>
+<li>Присваивание имени внутри функции делает его локальным на всём протяжении функции (иначе UnboundLocalError).</li>
+<li>Блоки if/for/while <b>не</b> создают области видимости; функции, классы, модули и comprehension — создают.</li>
+</ul>
+<p><b>Замыкание</b> — вложенная функция, захватывающая переменные объемлющей области; они хранятся в ячейках (<code>__closure__</code>). Основа декораторов и фабрик функций.</p>
+
+<h3>Рекурсия</h3>
+<p>Нужны база (условие остановки) и шаг с приближением к базе. Ограничение глубины: <code>sys.setrecursionlimit()</code>, по умолчанию около 1000; оптимизации хвостовой рекурсии в CPython нет. Мемоизация: <code>functools.lru_cache</code> / <code>cache</code> превращает экспоненциальную рекурсию в линейную.</p>
+
+<h3>lambda</h3>
+<p><code>lambda args: expression</code> — анонимная функция из <b>одного выражения</b> (без операторов, без return, без аннотаций). Применяется как аргумент key в sorted/min/max, в map/filter, в коллбэках. Для чего-то более сложного лучше def (PEP 8 не рекомендует присваивать lambda имя).</p>
+
+<h3>Код</h3>
+<pre><code>from functools import lru_cache, reduce, partial
+
+# LEGB, global и nonlocal
+c = 0
+def counter():
+    n = 0
+    def inc():
+        nonlocal n
+        global c
+        n += 1; c += 1
+        return n
+    return inc                      # замыкание
+f = counter(); f(); print(f(), c)   # 2 2
+
+# рекурсия с мемоизацией
+@lru_cache(maxsize=None)
+def fib(n):
+    return n if n &lt; 2 else fib(n-1) + fib(n-2)
+print(fib(100))                     # мгновенно благодаря кэшу
+
+# ловушка изменяемого аргумента по умолчанию
+def bad(x, acc=[]):  acc.append(x); return acc
+def good(x, acc=None):
+    acc = [] if acc is None else acc
+    acc.append(x); return acc
+print(bad(1), bad(2), good(1), good(2))    # [1] [1,2] [1] [1]
+
+# lambda и функции высшего порядка
+pairs = [('a', 3), ('b', 1), ('c', 2)]
+print(sorted(pairs, key=lambda p: p[1]))
+print(list(map(lambda x: x**2, range(5))))
+print(list(filter(lambda x: x % 2 == 0, range(10))))
+print(reduce(lambda a, b: a * b, range(1, 6)))     # 120
+print(partial(pow, 2)(10))                         # 1024
+
+# декоратор как применение замыкания
+def logged(fn):
+    def wrap(*a, **kw):
+        print('вызов', fn.__name__, a)
+        return fn(*a, **kw)
+    return wrap
+
+@logged
+def add(a, b): return a + b
+print(add(2, 3))</code></pre>
+`});
+
+T.push({b:2,n:7,t:"Многомодульные программы. import, pip, requirements.txt",
+s:"М. Лутц. Изучаем Python",
+h:`
+<h3>Модули и пакеты</h3>
+<p><b>Модуль</b> — файл .py; его имя доступно как <code>__name__</code>. <b>Пакет</b> — каталог с модулями (традиционно с <code>__init__.py</code>, где может выполняться инициализация и задаваться <code>__all__</code>). Модуль исполняется <b>один раз</b> при первом импорте; результат кэшируется в <code>sys.modules</code>, байт-код — в <code>__pycache__</code>.</p>
+<p><b>Поиск модуля</b> идёт по <code>sys.path</code>: каталог скрипта → PYTHONPATH → каталоги site-packages стандартной библиотеки.</p>
+
+<h3>Формы импорта</h3>
+<table>
+<tr><th>Форма</th><th>Что попадает в пространство имён</th><th>Замечание</th></tr>
+<tr><td><code>import math</code></td><td>имя модуля</td><td>обращение math.sqrt; безопасно</td></tr>
+<tr><td><code>import numpy as np</code></td><td>псевдоним</td><td>стандартная практика</td></tr>
+<tr><td><code>from math import sqrt, pi</code></td><td>конкретные имена</td><td>короче, но возможны коллизии</td></tr>
+<tr><td><code>from math import *</code></td><td>все публичные имена (или из <code>__all__</code>)</td><td>не рекомендуется: засоряет и перекрывает имена</td></tr>
+<tr><td><code>from . import mod</code></td><td>относительный импорт внутри пакета</td><td>работает только внутри пакета</td></tr>
+</table>
+<p>Области видимости: имена модуля глобальны только внутри него; импорт связывает объекты в текущем пространстве имён. Циклические импорты решаются переносом импорта внутрь функции или реорганизацией модулей.</p>
+<pre><code>if __name__ == "__main__":
+    main()      # код выполняется только при прямом запуске, не при импорте</code></pre>
+
+<h3>pip и управление зависимостями</h3>
+<table>
+<tr><th>Команда</th><th>Действие</th></tr>
+<tr><td><code>pip install pandas</code></td><td>установить последнюю версию</td></tr>
+<tr><td><code>pip install "pandas==2.2.0"</code></td><td>точная версия</td></tr>
+<tr><td><code>pip install "pandas&gt;=2.0,&lt;3.0"</code></td><td>диапазон версий</td></tr>
+<tr><td><code>pip install -U pandas</code></td><td>обновить</td></tr>
+<tr><td><code>pip uninstall pandas</code></td><td>удалить</td></tr>
+<tr><td><code>pip list</code>, <code>pip show pandas</code></td><td>список / информация о пакете</td></tr>
+<tr><td><code>pip freeze &gt; requirements.txt</code></td><td>зафиксировать окружение</td></tr>
+<tr><td><code>pip install -r requirements.txt</code></td><td>установить всё из файла</td></tr>
+</table>
+<p><b>Виртуальное окружение</b> изолирует зависимости проекта: <code>python -m venv .venv</code>, затем <code>source .venv/bin/activate</code> (Windows: <code>.venv\\Scripts\\activate</code>). Альтернативы: poetry, pipenv, uv, conda.</p>
+<p><b>Семантическое версионирование</b> MAJOR.MINOR.PATCH: несовместимые изменения — обратно совместимая функциональность — исправления. Отсюда осмысленность ограничения <code>&gt;=2.0,&lt;3.0</code>.</p>
+<div class="note"><b>requirements.txt vs pyproject.toml.</b> requirements.txt фиксирует конкретное окружение (для воспроизводимого деплоя), pyproject.toml описывает зависимости пакета и метаданные сборки (современный стандарт PEP 518/621).</div>
+
+<h3>Код</h3>
+<pre><code># --- utils/geometry.py ---
+PI = 3.14159
+def area(r): return PI * r * r
+def _internal(): pass          # с подчёркиванием: не экспортируется через *
+__all__ = ['area', 'PI']
+
+# --- utils/__init__.py ---
+from .geometry import area, PI
+
+# --- main.py ---
+import sys, math as m
+from utils import area
+from utils.geometry import PI
+
+print(area(2), PI, m.sqrt(16))
+print(sys.path[:2])
+print('utils' in sys.modules)
+
+if __name__ == "__main__":
+    print("запущено напрямую:", __name__)</code></pre>
+<pre><code># requirements.txt
+numpy==2.0.1
+pandas&gt;=2.2,&lt;3.0
+scikit-learn~=1.5.0        # совместимо: &gt;=1.5.0, &lt;1.6.0
+requests</code></pre>
+`});
+
+T.push({b:2,n:8,t:"ООП в Python: классы, инкапсуляция, наследование, полиморфизм",
+s:"М. Лутц. Изучаем Python",
+h:`
+<h3>Классы и объекты</h3>
+<p><b>Класс</b> — шаблон, описывающий поля (атрибуты) и методы; <b>объект</b> — экземпляр. <code>__init__</code> — инициализатор (объект уже создан <code>__new__</code>), <code>self</code> — ссылка на экземпляр, передаётся неявно.</p>
+<ul>
+<li><b>Атрибуты экземпляра</b> хранятся в <code>self.__dict__</code>, <b>атрибуты класса</b> общие для всех экземпляров.</li>
+<li>Методы: обычные (self), <code>@classmethod</code> (cls, альтернативные конструкторы), <code>@staticmethod</code> (без доступа к состоянию).</li>
+<li><code>__slots__</code> отключает <code>__dict__</code>, экономит память и ускоряет доступ.</li>
+<li><b>Магические методы:</b> <code>__str__, __repr__, __len__, __eq__, __hash__, __lt__, __getitem__, __iter__, __call__, __enter__/__exit__, __add__</code>.</li>
+</ul>
+
+<h3>Инкапсуляция</h3>
+<p>В Python инкапсуляция основана на соглашениях, а не на жёстких модификаторах доступа.</p>
+<ul>
+<li><code>attr</code> — публичный.</li>
+<li><code>_attr</code> — «защищённый» по соглашению: внутренняя деталь реализации.</li>
+<li><code>__attr</code> — <b>name mangling</b>: имя преобразуется в <code>_ClassName__attr</code>, что защищает от случайного переопределения в подклассах, но не запрещает доступ.</li>
+<li><code>@property</code> и сеттеры дают контролируемый доступ (валидация, вычисляемые поля) без изменения интерфейса.</li>
+</ul>
+
+<h3>Наследование</h3>
+<p><code>class Child(Parent)</code>; <code>super().__init__(...)</code> вызывает реализацию родителя. Множественное наследование разрешается по <b>MRO</b> (алгоритм линеаризации C3), доступному через <code>Cls.__mro__</code>. Проверки: <code>isinstance</code>, <code>issubclass</code>.</p>
+<p><b>Абстрактные классы:</b> модуль <code>abc</code>, декоратор <code>@abstractmethod</code> — нельзя создать экземпляр без реализации. Композиция часто предпочтительнее наследования.</p>
+
+<h3>Полиморфизм</h3>
+<p>Один интерфейс — разные реализации: переопределение методов в подклассах, <b>утиная типизация</b> (важен не тип, а наличие нужных методов), перегрузка операторов через магические методы, обобщённые функции <code>functools.singledispatch</code>. Перегрузки методов по сигнатуре (как в C++/Java) нет — используются значения по умолчанию и <code>*args</code>.</p>
+
+<h3>Код</h3>
+<pre><code>from abc import ABC, abstractmethod
+from dataclasses import dataclass
+
+class Shape(ABC):
+    count = 0                              # атрибут класса
+
+    def __init__(self, name):
+        self.name = name                   # атрибут экземпляра
+        self._id = Shape.count             # защищённый по соглашению
+        self.__secret = "скрыто"           # name mangling
+        Shape.count += 1
+
+    @abstractmethod
+    def area(self): ...
+
+    def __repr__(self): return f"{type(self).__name__}({self.name}, S={self.area():.2f})"
+
+    @classmethod
+    def total(cls): return cls.count
+
+    @staticmethod
+    def units(): return "см^2"
+
+class Circle(Shape):
+    def __init__(self, r):
+        super().__init__("круг")
+        self.r = r
+
+    @property
+    def r(self): return self._r
+
+    @r.setter
+    def r(self, v):
+        if v &lt;= 0: raise ValueError("радиус должен быть положительным")
+        self._r = v
+
+    def area(self): return 3.14159 * self._r ** 2
+
+class Rect(Shape):
+    def __init__(self, a, b):
+        super().__init__("прямоугольник"); self.a, self.b = a, b
+    def area(self): return self.a * self.b
+    def __add__(self, other): return self.area() + other.area()   # перегрузка
+
+shapes = [Circle(2), Rect(3, 4)]
+for s in shapes: print(s, s.area())        # полиморфизм
+print(Shape.total(), Shape.units())
+print(Circle.__mro__)                       # порядок разрешения методов
+print(Circle(2)._Shape__secret)             # доступ к __secret через mangled-имя
+
+# утиная типизация: важен интерфейс, а не иерархия классов
+def describe(x):
+    return x.area() if hasattr(x, 'area') else 'нет площади'
+print(describe(Rect(2, 2)), describe('строка'))
+
+@dataclass(frozen=True, slots=True)
+class Point:
+    x: float
+    y: float
+print(Point(1, 2))</code></pre>
+`});
+
+T.push({b:2,n:9,t:"Библиотека NumPy",
+s:"У. Маккинни. Python и анализ данных",
+h:`
+<h3>Что такое ndarray</h3>
+<p><code>numpy.ndarray</code> — однородный n-мерный массив фиксированного типа в непрерывном блоке памяти. Отсюда преимущества перед списком: меньше памяти, векторизованные операции на уровне C и SIMD, отсутствие интерпретационных накладных расходов.</p>
+<p>Ключевые атрибуты: <code>shape</code>, <code>ndim</code>, <code>size</code>, <code>dtype</code>, <code>itemsize</code>, <code>strides</code>, <code>T</code>.</p>
+<p><b>Создание:</b> array, zeros, ones, full, empty, eye, arange, linspace, logspace, random, fromfunction, reshape, astype.</p>
+
+<h3>Индексация и срезы</h3>
+<ul>
+<li>Базовые срезы <code>a[1:5, ::2]</code> возвращают <b>представление (view)</b>, а не копию: изменение отражается на исходном массиве. Явная копия — <code>a.copy()</code>.</li>
+<li><b>Fancy indexing</b> списком/массивом индексов и <b>булева маска</b> <code>a[a &gt; 0]</code> всегда возвращают копию.</li>
+<li><code>np.where(cond, x, y)</code> — векторизованный тернарный оператор; <code>np.newaxis</code> добавляет ось.</li>
+</ul>
+
+<h3>Broadcasting</h3>
+<p>Правило: формы сравниваются справа налево; размерности совместимы, если равны или одна из них равна 1; недостающие оси слева достраиваются единицами. Позволяет складывать матрицу (3,4) с вектором (4,) или (3,1) без явных циклов и лишних копий.</p>
+
+<h3>Математика и агрегация</h3>
+<p><b>Универсальные функции (ufunc)</b> поэлементно: sqrt, exp, log, sin, abs, maximum. <b>Агрегации</b>: sum, mean, std, var, min, max, argmin, argmax, cumsum, prod — с параметром <code>axis</code> (axis=0 — по строкам вниз, axis=1 — вдоль строк) и <code>keepdims</code>.</p>
+<p><b>Модуль np.random</b> (современный интерфейс Generator): random, integers, normal, uniform, choice, shuffle, permutation, seed через <code>default_rng(seed)</code>.</p>
+
+<h3>Векторы и матрицы</h3>
+<p><code>*</code> — поэлементное умножение, <code>@</code> (или np.dot/matmul) — матричное. Модуль <code>np.linalg</code>: inv, solve, det, matrix_rank, eig/eigh, svd, qr, cholesky, norm, pinv, lstsq. Транспонирование <code>.T</code>, изменение формы reshape/ravel/flatten, объединение concatenate/vstack/hstack/stack, разбиение split.</p>
+<div class="note"><b>Производительность.</b> Никаких циклов Python по элементам — только векторизация. <code>np.linalg.solve(A, b)</code> предпочтительнее <code>inv(A) @ b</code>: быстрее и численно устойчивее.</div>
+
+<h3>Код</h3>
+<pre><code>import numpy as np
+
+a = np.arange(12).reshape(3, 4)
+print(a.shape, a.dtype, a.strides, a.ndim)
+
+# срез - представление, fancy indexing - копия
+v = a[:, 1:3]; v[0, 0] = 99
+print(a[0, 1])                       # 99: изменился исходный массив
+c = a[[0, 2]]; c[0, 0] = -1
+print(a[0, 0])                       # 0: копия не влияет
+
+print(a[a % 2 == 0])                 # булева маска
+print(np.where(a &gt; 5, a, 0))
+
+# broadcasting: (3,4) + (4,) и (3,1)
+print(a + np.array([10, 20, 30, 40]))
+print(a - a.mean(axis=1, keepdims=True))     # центрирование по строкам
+
+print(a.sum(axis=0), a.mean(axis=1), a.argmax())
+
+rng = np.random.default_rng(0)
+x = rng.normal(0, 1, (1000, 3))
+print(np.round(x.mean(axis=0), 3), np.round(np.cov(x.T), 2))
+print(rng.choice(['a', 'b', 'c'], size=5, p=[.5, .3, .2]))
+
+# линейная алгебра
+A = np.array([[3., 1.], [1., 2.]]); b = np.array([9., 8.])
+print(np.linalg.solve(A, b))         # решение системы, не inv(A) @ b
+print(np.linalg.det(A), np.linalg.matrix_rank(A))
+print(np.linalg.eigh(A)[0], np.linalg.norm(b))
+U, S, Vt = np.linalg.svd(A); print(np.round(S, 3))
+
+# векторизация против цикла
+big = rng.random(1_000_000)
+print(np.sqrt(big).sum())            # быстрее цикла в десятки раз</code></pre>
+`});
+
+T.push({b:2,n:10,t:"Библиотека Pandas",
+s:"У. Маккинни. Python и анализ данных",
+h:`
+<h3>Структуры данных</h3>
+<ul>
+<li><b>Series</b> — одномерный массив с индексом (метками); по сути словарь + ndarray.</li>
+<li><b>DataFrame</b> — двумерная таблица: набор Series с общим индексом строк и именованными столбцами; столбцы могут иметь разные типы.</li>
+</ul>
+<p>Инспекция: head/tail, shape, info, describe, dtypes, columns, index, memory_usage, value_counts, nunique, isna.</p>
+
+<h3>Чтение и запись</h3>
+<p><code>read_csv</code> (sep, header, names, dtype, parse_dates, usecols, nrows, chunksize, encoding), read_excel, read_json, read_parquet, read_sql. Запись: to_csv(index=False), to_excel, to_parquet, to_sql.</p>
+
+<h3>Выборка данных</h3>
+<ul>
+<li><code>df['col']</code> — Series, <code>df[['a','b']]</code> — DataFrame.</li>
+<li><code>df.loc[строки, столбцы]</code> — по <b>меткам</b> (правая граница включается), <code>df.iloc[...]</code> — по <b>позициям</b>.</li>
+<li>Булева фильтрация: <code>df[(df.age &gt; 30) &amp; (df.city == 'СПб')]</code> — обязательно скобки и <code>&amp; | ~</code>.</li>
+<li><code>query()</code>, <code>isin()</code>, <code>between()</code>, <code>str.contains()</code>, <code>nlargest()</code>.</li>
+</ul>
+<div class="note"><b>SettingWithCopyWarning</b> возникает при присваивании в срез-копию (chained indexing <code>df[df.a &gt; 0]['b'] = 1</code>). Правильно — единая операция <code>df.loc[df.a &gt; 0, 'b'] = 1</code>.</div>
+
+<h3>Индекс и мультииндекс</h3>
+<p><code>set_index</code>, <code>reset_index</code>, <code>reindex</code>, <code>sort_index</code>. <b>MultiIndex</b> — иерархический индекс (несколько уровней): создаётся через set_index списком колонок или groupby по нескольким ключам; доступ через <code>loc[(k1, k2)]</code> и <code>xs</code>; развороты <code>stack</code>/<code>unstack</code>, <code>pivot_table</code>.</p>
+
+<h3>Группировка, сортировка, объединение</h3>
+<p><b>groupby</b> реализует «разделить — применить — объединить»: <code>df.groupby('city')['pay'].agg(['mean','count'])</code>, несколько ключей, <code>transform</code> (сохраняет форму), <code>filter</code>, <code>apply</code>. Сортировка: <code>sort_values(by=, ascending=)</code>, <code>sort_index()</code>.</p>
+<table>
+<tr><th>Операция</th><th>Смысл</th></tr>
+<tr><td><code>merge</code></td><td>соединение по ключам, аналог SQL JOIN: how = inner/left/right/outer</td></tr>
+<tr><td><code>join</code></td><td>соединение по индексу (обёртка над merge)</td></tr>
+<tr><td><code>concat</code></td><td>склейка по оси: axis=0 — строки, axis=1 — столбцы</td></tr>
+</table>
+<p><b>apply/map:</b> <code>Series.map</code> — поэлементно, <code>DataFrame.apply</code> — по оси, <code>applymap</code> — поэлементно по всей таблице. Векторизованные операции и <code>.str</code>/<code>.dt</code> аксессоры быстрее apply.</p>
+<p><b>Пропуски:</b> isna, fillna, dropna, interpolate. <b>Дубликаты:</b> duplicated, drop_duplicates.</p>
+
+<h3>Визуализация</h3>
+<p><code>df.plot(kind='line'|'bar'|'hist'|'box'|'scatter')</code> поверх matplotlib; <code>df.style</code> для форматирования таблиц (background_gradient, format).</p>
+
+<h3>Код</h3>
+<pre><code>import pandas as pd, numpy as np
+
+df = pd.DataFrame({
+    'city':  ['СПб', 'Москва', 'СПб', 'Казань', 'Москва'],
+    'dept':  ['IT', 'IT', 'HR', 'IT', 'HR'],
+    'pay':   [180, 220, 120, 150, 130],
+    'age':   [28, 35, 41, 26, 33],
+})
+
+print(df.head(), df.info(), df.describe(), sep='\\n')
+
+# выборка
+print(df.loc[df.pay &gt; 140, ['city', 'pay']])
+print(df.iloc[0:2, 1:3])
+print(df.query("pay &gt; 140 and dept == 'IT'"))
+print(df[df.city.isin(['СПб', 'Казань'])])
+
+# группировка и агрегация
+g = df.groupby('city')['pay'].agg(['mean', 'max', 'count'])
+print(g.sort_values('mean', ascending=False))
+print(df.groupby(['city', 'dept'])['pay'].mean().unstack())   # мультииндекс
+
+# transform сохраняет форму: доля от средней по отделу
+df['ratio'] = df.pay / df.groupby('dept')['pay'].transform('mean')
+
+# объединение
+bonus = pd.DataFrame({'city': ['СПб', 'Москва'], 'k': [1.1, 1.2]})
+m = df.merge(bonus, on='city', how='left')
+m['k'] = m.k.fillna(1.0)
+m['total'] = (m.pay * m.k).round(1)
+print(m)
+
+print(pd.concat([df.head(2), df.tail(1)], axis=0, ignore_index=True))
+
+# apply и векторизация
+df['level'] = np.where(df.pay &gt;= 180, 'senior', 'middle')     # быстрее apply
+print(df.pivot_table(index='city', columns='dept', values='pay', aggfunc='mean'))
+
+df.to_csv('out.csv', index=False)
+# df.plot(kind='bar', x='city', y='pay')</code></pre>
+`});
+
+T.push({b:2,n:11,t:"Списки: стек, очередь, дек. Сортировки слиянием и быстрая",
+s:"Д. Кнут. Искусство программирования; Р. Стивенс. Алгоритмы",
+h:`
+<h3>Структура данных «список»</h3>
+<p><b>Массив (динамический массив)</b>: непрерывная память, доступ по индексу O(1), вставка/удаление в середину O(n). <b>Связный список</b>: узлы со ссылками, вставка/удаление при известном узле O(1), доступ по индексу O(n), больше накладных расходов на память и хуже локальность кэша.</p>
+
+<h3>Стек, очередь, дек</h3>
+<table>
+<tr><th>Структура</th><th>Дисциплина</th><th>Операции</th><th>Сложность</th><th>Применение</th></tr>
+<tr><td>Стек</td><td>LIFO</td><td>push, pop, top, empty</td><td>O(1)</td><td>вызовы функций, скобочные последовательности, DFS, отмена действий, обратная польская запись</td></tr>
+<tr><td>Очередь</td><td>FIFO</td><td>enqueue, dequeue, front</td><td>O(1)</td><td>BFS, буферизация, планировщики задач, очереди сообщений</td></tr>
+<tr><td>Дек</td><td>с обоих концов</td><td>push/pop front и back</td><td>O(1)</td><td>скользящее окно (максимум за O(n)), кэш LRU</td></tr>
+</table>
+<p>В Python: стек — обычный list (append/pop), очередь и дек — <code>collections.deque</code> (кольцевой буфер, O(1) с обоих концов; list.pop(0) — O(n)).</p>
+
+<h3>Сортировка слиянием</h3>
+<pre><code>MERGE_SORT(A, l, r):
+    если r - l &lt;= 1: вернуть
+    m = (l + r) / 2
+    MERGE_SORT(A, l, m)
+    MERGE_SORT(A, m, r)
+    MERGE(A, l, m, r)          # слияние двух отсортированных частей за O(n)</code></pre>
+<p>T(n) = 2T(n/2) + Θ(n) ⇒ по основной теореме <b>Θ(n log n)</b> во всех случаях. Память O(n). <b>Устойчива</b>. Хорошо распараллеливается и подходит для внешней сортировки (данные не помещаются в память) и для связных списков (слияние без доп. памяти).</p>
+
+<h3>Быстрая сортировка</h3>
+<pre><code>QUICK_SORT(A, l, r):
+    если l &gt;= r: вернуть
+    p = PARTITION(A, l, r)     # опорный элемент на своё место
+    QUICK_SORT(A, l, p - 1)
+    QUICK_SORT(A, p + 1, r)
+
+PARTITION(A, l, r):            # схема Ломуто
+    pivot = A[r]; i = l - 1
+    для j от l до r-1:
+        если A[j] &lt;= pivot: i++; swap(A[i], A[j])
+    swap(A[i+1], A[r]); вернуть i + 1</code></pre>
+<p><b>Средняя сложность Θ(n log n)</b>, <b>худшая Θ(n²)</b> (уже отсортированный массив при выборе крайнего опорного элемента). Память O(log n) на стек рекурсии, сортировка <b>на месте</b>, <b>неустойчива</b>. На практике быстрее merge sort из-за локальности кэша и отсутствия дополнительной памяти.</p>
+<p><b>Улучшения:</b> случайный выбор опорного элемента или «медиана трёх»; схема Хоара; трёхпутевое разбиение при большом числе дубликатов; переход на сортировку вставками для коротких подмассивов; introsort — переключение на heapsort при слишком глубокой рекурсии.</p>
+<p><b>Родственный алгоритм:</b> quickselect — поиск k-й порядковой статистики за O(n) в среднем.</p>
+
+<h3>Код</h3>
+<pre><code>from collections import deque
+
+stack = []
+stack.append(1); stack.append(2); print(stack.pop(), stack)     # LIFO
+
+q = deque()
+q.append('a'); q.append('b'); print(q.popleft(), q)             # FIFO
+
+dq = deque([1, 2, 3])
+dq.appendleft(0); dq.pop(); print(dq)                           # дек
+
+def is_balanced(s):                     # классическое применение стека
+    pairs, st = {')': '(', ']': '[', '}': '{'}, []
+    for ch in s:
+        if ch in '([{': st.append(ch)
+        elif ch in pairs:
+            if not st or st.pop() != pairs[ch]: return False
+    return not st
+print(is_balanced("([]{})"), is_balanced("(]"))
+
+def merge_sort(a):                      # O(n log n), устойчива
+    if len(a) &lt;= 1: return a
+    m = len(a) // 2
+    L, R = merge_sort(a[:m]), merge_sort(a[m:])
+    out, i, j = [], 0, 0
+    while i &lt; len(L) and j &lt; len(R):
+        if L[i] &lt;= R[j]: out.append(L[i]); i += 1
+        else:            out.append(R[j]); j += 1
+    out.extend(L[i:]); out.extend(R[j:])
+    return out
+
+def quick_sort(a, l=0, r=None):         # на месте, схема Ломуто
+    if r is None: r = len(a) - 1
+    if l &gt;= r: return a
+    pivot, i = a[r], l - 1
+    for j in range(l, r):
+        if a[j] &lt;= pivot:
+            i += 1; a[i], a[j] = a[j], a[i]
+    a[i+1], a[r] = a[r], a[i+1]
+    quick_sort(a, l, i); quick_sort(a, i + 2, r)
+    return a
+
+import random
+data = [random.randint(0, 100) for _ in range(15)]
+print(merge_sort(data))
+print(quick_sort(data.copy()))</code></pre>
+`});
+
+T.push({b:2,n:12,t:"Деревья. Обходы в ширину и в глубину",
+s:"Д. Кнут. Искусство программирования; Р. Стивенс. Алгоритмы",
+h:`
+<h3>Основные понятия</h3>
+<p><b>Дерево</b> — связный ациклический граф; с выделенным корнем — корневое дерево. Термины: корень, потомок, родитель, лист, высота (число рёбер до самого глубокого листа), глубина узла, поддерево. В дереве с n вершинами ровно n−1 ребро.</p>
+
+<h3>Виды деревьев</h3>
+<table>
+<tr><th>Вид</th><th>Свойство</th><th>Применение</th></tr>
+<tr><td>Бинарное</td><td>не более двух потомков</td><td>базовая структура</td></tr>
+<tr><td>Двоичное дерево поиска (BST)</td><td>левое поддерево &lt; узел ≤ правое</td><td>поиск O(h); при вырождении h = n</td></tr>
+<tr><td>AVL, красно-чёрное</td><td>самобалансирующиеся, h = O(log n)</td><td>std::map, TreeMap</td></tr>
+<tr><td>Куча (heap)</td><td>частичный порядок родитель/потомок</td><td>приоритетная очередь</td></tr>
+<tr><td>B-дерево, B+</td><td>много потомков, малая высота</td><td>индексы СУБД и файловых систем</td></tr>
+<tr><td>Trie (бор)</td><td>ключ — путь по символам</td><td>автодополнение, словари</td></tr>
+<tr><td>Дерево отрезков, Фенвика</td><td>агрегаты на отрезках</td><td>запросы суммы/минимума за O(log n)</td></tr>
+</table>
+
+<h3>Способы представления</h3>
+<ul>
+<li><b>Узлы со ссылками:</b> объект с полями value, left, right (или список детей).</li>
+<li><b>Массивом</b> (для полного бинарного дерева): потомки узла i — 2i+1 и 2i+2, родитель — (i−1)//2. Используется в куче.</li>
+<li><b>Список смежности</b> или массив родителей parent[i] — для произвольных деревьев.</li>
+</ul>
+
+<h3>Обходы</h3>
+<p><b>В глубину (DFS)</b>, рекурсивно или через стек:</p>
+<ul>
+<li><b>Прямой (preorder)</b>: узел → лево → право — копирование дерева, сериализация.</li>
+<li><b>Симметричный (inorder)</b>: лево → узел → право — для BST даёт отсортированную последовательность.</li>
+<li><b>Обратный (postorder)</b>: лево → право → узел — удаление, вычисление размеров, вычисление выражений.</li>
+</ul>
+<pre><code>DFS(v):                        BFS(root):
+  посетить(v)                    Q = очередь([root])
+  для u из детей(v):             пока Q не пуста:
+      DFS(u)                       v = Q.dequeue()
+                                   посетить(v)
+                                   для u из детей(v): Q.enqueue(u)</code></pre>
+<p><b>В ширину (BFS)</b> — по уровням, с очередью; даёт кратчайший путь по числу рёбер в невзвешенном графе.</p>
+<p><b>Сложность обоих обходов:</b> время Θ(n) (каждый узел и ребро посещаются один раз), память: DFS — O(h) (в худшем O(n) для вырожденного дерева), BFS — O(w), где w — максимальная ширина уровня (в худшем O(n)).</p>
+
+<h3>Код</h3>
+<pre><code>from collections import deque
+
+class Node:
+    def __init__(self, v, left=None, right=None):
+        self.v, self.left, self.right = v, left, right
+
+root = Node(8, Node(3, Node(1), Node(6)), Node(10, None, Node(14)))
+
+def preorder(n, out=None):
+    out = [] if out is None else out
+    if n: out.append(n.v); preorder(n.left, out); preorder(n.right, out)
+    return out
+
+def inorder(n, out=None):
+    out = [] if out is None else out
+    if n: inorder(n.left, out); out.append(n.v); inorder(n.right, out)
+    return out
+
+def postorder(n, out=None):
+    out = [] if out is None else out
+    if n: postorder(n.left, out); postorder(n.right, out); out.append(n.v)
+    return out
+
+print(preorder(root))     # [8, 3, 1, 6, 10, 14]
+print(inorder(root))      # [1, 3, 6, 8, 10, 14] - BST даёт сортировку
+print(postorder(root))
+
+def bfs(n):                                  # обход по уровням, O(n)
+    if not n: return []
+    q, out = deque([n]), []
+    while q:
+        c = q.popleft(); out.append(c.v)
+        if c.left:  q.append(c.left)
+        if c.right: q.append(c.right)
+    return out
+print(bfs(root))          # [8, 3, 10, 1, 6, 14]
+
+def dfs_iter(n):                             # DFS без рекурсии, через стек
+    st, out = [n], []
+    while st:
+        c = st.pop()
+        if c:
+            out.append(c.v); st.append(c.right); st.append(c.left)
+    return out
+print(dfs_iter(root))
+
+def height(n): return 0 if not n else 1 + max(height(n.left), height(n.right))
+def search(n, x):                            # поиск в BST, O(h)
+    while n and n.v != x:
+        n = n.left if x &lt; n.v else n.right
+    return n is not None
+print(height(root), search(root, 6), search(root, 7))</code></pre>
+`});
+
+T.push({b:2,n:13,t:"Ассоциативный массив (хеш-таблицы) и куча",
+s:"Р. Стивенс. Алгоритмы. Теория и практическое применение",
+h:`
+<h3>Ассоциативный массив</h3>
+<div class="def"><b>Определение.</b> Абстрактный тип данных «ключ → значение» с операциями insert, find, delete. Реализации: хеш-таблица (O(1) в среднем, порядок не сохраняется) и сбалансированное дерево поиска (O(log n) гарантированно, поддерживает порядок и диапазонные запросы).</div>
+
+<h3>Хеш-таблица</h3>
+<p>Массив «корзин»; позиция вычисляется как <code>h(key) mod m</code>. Требования к хеш-функции: детерминированность, равномерность, быстрота. Ключ обязан быть неизменяемым (в Python — хешируемым): изменение ключа «потеряет» запись.</p>
+<p><b>Разрешение коллизий:</b></p>
+<ul>
+<li><b>Метод цепочек</b>: в каждой корзине связный список (или дерево при длинных цепочках, как в Java HashMap).</li>
+<li><b>Открытая адресация</b>: линейное или квадратичное пробирование, двойное хеширование. Экономнее по памяти, но чувствительно к кластеризации; удаление требует пометок-надгробий (tombstones).</li>
+</ul>
+<p><b>Коэффициент заполнения</b> α = n/m. При превышении порога (обычно 0.66–0.75) таблица <b>рехешируется</b> с удвоением размера — O(n), но амортизированно операции остаются O(1).</p>
+<table><tr><th>Операция</th><th>Средний</th><th>Худший</th></tr>
+<tr><td>insert / find / delete</td><td>O(1)</td><td>O(n) — все ключи в одну корзину</td></tr></table>
+<div class="note"><b>dict в CPython</b> — открытая адресация с рандомизацией хеша строк (защита от hash-DoS) и «компактной» схемой: отдельная плотная таблица записей + разреженный массив индексов, что даёт экономию памяти и сохранение порядка вставки. <code>set</code> устроен аналогично, но без значений.</div>
+
+<h3>Куча (heap)</h3>
+<div class="def"><b>Определение.</b> Полное бинарное дерево со свойством кучи: в min-heap значение родителя ≤ значений потомков (в max-heap — ≥). Хранится в массиве: потомки i — 2i+1 и 2i+2, родитель — (i−1)//2.</div>
+<table>
+<tr><th>Операция</th><th>Алгоритм</th><th>Сложность</th></tr>
+<tr><td>get min/max</td><td>корень</td><td>O(1)</td></tr>
+<tr><td>insert (push)</td><td>добавить в конец + sift-up (всплытие)</td><td>O(log n)</td></tr>
+<tr><td>extract min (pop)</td><td>корень ↔ последний, удалить, sift-down (просеивание)</td><td>O(log n)</td></tr>
+<tr><td>build heap (heapify)</td><td>sift-down от n/2 до 0</td><td><b>O(n)</b>, а не O(n log n)</td></tr>
+<tr><td>heapsort</td><td>build + n раз extract</td><td>O(n log n), память O(1)</td></tr>
+</table>
+<p><b>Виды:</b> бинарная, d-арная, биномиальная, фибоначчиева (амортизированное decrease-key за O(1) — ускоряет Дейкстру до O(E + V log V)), левосторонняя (быстрое слияние).</p>
+<p><b>Применение:</b> приоритетная очередь, Дейкстра и A*, алгоритм Прима, планировщики задач, k наибольших элементов, слияние k отсортированных списков, медиана в потоке (две кучи).</p>
+
+<h3>Код</h3>
+<pre><code>import heapq
+
+# --- своя хеш-таблица методом цепочек ---
+class HashMap:
+    def __init__(self, cap=8):
+        self.m, self.n = cap, 0
+        self.buckets = [[] for _ in range(cap)]
+
+    def _idx(self, k): return hash(k) % self.m
+
+    def put(self, k, v):
+        b = self.buckets[self._idx(k)]
+        for i, (kk, _) in enumerate(b):
+            if kk == k: b[i] = (k, v); return
+        b.append((k, v)); self.n += 1
+        if self.n / self.m &gt; 0.75: self._rehash()
+
+    def get(self, k, default=None):
+        for kk, vv in self.buckets[self._idx(k)]:
+            if kk == k: return vv
+        return default
+
+    def _rehash(self):
+        items = [kv for b in self.buckets for kv in b]
+        self.m *= 2; self.buckets = [[] for _ in range(self.m)]; self.n = 0
+        for k, v in items: self.put(k, v)
+
+h = HashMap()
+for i, w in enumerate(['алгоритм', 'куча', 'хеш']): h.put(w, i)
+print(h.get('куча'), h.get('нет', -1))
+
+# --- куча ---
+heap = [5, 1, 8, 3]
+heapq.heapify(heap)                        # O(n)
+heapq.heappush(heap, 0)
+print(heapq.heappop(heap), heap)           # 0 - минимум
+print(heapq.nsmallest(2, [7, 2, 9, 1]), heapq.nlargest(2, [7, 2, 9, 1]))
+
+# max-heap через отрицание значений
+mx = [-x for x in [5, 1, 8]]; heapq.heapify(mx)
+print(-heapq.heappop(mx))                  # 8
+
+# приоритетная очередь: (приоритет, задача)
+pq = []
+for pr, task in [(2, 'тест'), (1, 'сборка'), (3, 'деплой')]:
+    heapq.heappush(pq, (pr, task))
+while pq: print(heapq.heappop(pq), end=' ')
+print()
+
+def heapsort(a):                           # O(n log n)
+    h = list(a); heapq.heapify(h)
+    return [heapq.heappop(h) for _ in range(len(h))]
+print(heapsort([4, 1, 9, 2, 7]))</code></pre>
+`});
+
+T.push({b:2,n:14,t:"Графы. Алгоритмы Дейкстры и A*",
+s:"Р. Стивенс. Алгоритмы. Теория и практическое применение",
+h:`
+<h3>Основные понятия</h3>
+<p><b>Граф</b> G = (V, E) — множество вершин и рёбер. Виды: ориентированный/неориентированный, взвешенный/невзвешенный, связный, ациклический (DAG), полный, двудольный, дерево (связный ациклический). Степень вершины, путь, цикл, компонента связности.</p>
+
+<h3>Представления</h3>
+<table>
+<tr><th>Представление</th><th>Память</th><th>Проверка ребра</th><th>Перебор соседей</th><th>Когда применять</th></tr>
+<tr><td>Матрица смежности</td><td>O(V²)</td><td>O(1)</td><td>O(V)</td><td>плотный граф</td></tr>
+<tr><td>Список смежности</td><td>O(V + E)</td><td>O(deg v)</td><td>O(deg v)</td><td>разрежённый граф (обычный случай)</td></tr>
+<tr><td>Список рёбер</td><td>O(E)</td><td>O(E)</td><td>O(E)</td><td>Крускал, Форд — Беллман</td></tr>
+</table>
+<p><b>Базовые операции и алгоритмы:</b> обходы DFS/BFS (компоненты связности, обнаружение циклов, топологическая сортировка, поиск мостов), кратчайшие пути (BFS для невзвешенного, Дейкстра, Форд — Беллман при отрицательных весах, Флойд — Уоршелл для всех пар), минимальный остов (Прим, Крускал), максимальный поток (Форд — Фалкерсон, Диниц).</p>
+
+<h3>Алгоритм Дейкстры</h3>
+<p>Находит кратчайшие пути от источника при <b>неотрицательных</b> весах. Жадная стратегия: на каждом шаге извлекается ближайшая непосещённая вершина, её расстояние окончательно.</p>
+<pre><code>DIJKSTRA(G, s):
+    d[v] = бесконечность для всех v; d[s] = 0
+    Q = приоритетная очередь с (0, s)
+    пока Q не пуста:
+        (du, u) = extract_min(Q)
+        если du &gt; d[u]: продолжить          # устаревшая запись
+        для (v, w) из смежных с u:
+            если d[u] + w &lt; d[v]:
+                d[v] = d[u] + w; parent[v] = u
+                push(Q, (d[v], v))</code></pre>
+<p><b>Сложность:</b> O(V²) с массивом (плотный граф), <b>O((V + E) log V)</b> с бинарной кучей, O(E + V log V) с фибоначчиевой. При отрицательных весах алгоритм неверен — нужен Форд — Беллман, O(VE), который также обнаруживает отрицательные циклы.</p>
+
+<h3>Алгоритм A*</h3>
+<p>Информированный поиск: приоритет вершины — <b>f(v) = g(v) + h(v)</b>, где g — реальная стоимость от старта, h — эвристическая оценка оставшегося пути до цели.</p>
+<ul>
+<li><b>Допустимость</b> эвристики: h(v) ≤ истинного расстояния до цели — гарантирует оптимальность решения.</li>
+<li><b>Монотонность (согласованность):</b> h(u) ≤ w(u,v) + h(v) — тогда каждая вершина обрабатывается один раз.</li>
+<li>h ≡ 0 превращает A* в Дейкстру; чем точнее h, тем меньше просматривается вершин.</li>
+<li>Типичные эвристики на сетке: манхэттенское расстояние (4 направления), евклидово, расстояние Чебышёва (8 направлений).</li>
+</ul>
+<p><b>Сложность</b> в худшем случае та же, что у Дейкстры, но на практике существенно меньше раскрытых вершин. Применение: маршрутизация, игры, планирование.</p>
+
+<h3>Код</h3>
+<pre><code>import heapq
+from collections import deque
+
+G = {'A': [('B', 4), ('C', 1)],
+     'B': [('D', 1)],
+     'C': [('B', 2), ('D', 5)],
+     'D': []}
+
+def bfs(g, s):                              # кратчайший путь по числу рёбер
+    dist, q = {s: 0}, deque([s])
+    while q:
+        u = q.popleft()
+        for v, _ in g[u]:
+            if v not in dist:
+                dist[v] = dist[u] + 1; q.append(v)
+    return dist
+
+def dijkstra(g, s):                         # O((V + E) log V)
+    d = {v: float('inf') for v in g}; d[s] = 0
+    parent, pq = {}, [(0, s)]
+    while pq:
+        du, u = heapq.heappop(pq)
+        if du &gt; d[u]: continue
+        for v, w in g[u]:
+            if du + w &lt; d[v]:
+                d[v] = du + w; parent[v] = u
+                heapq.heappush(pq, (d[v], v))
+    return d, parent
+
+print(bfs(G, 'A'))
+d, par = dijkstra(G, 'A')
+print(d)                                    # {'A':0,'B':3,'C':1,'D':4}
+
+def path(parent, s, t):
+    p, cur = [t], t
+    while cur != s: cur = parent[cur]; p.append(cur)
+    return p[::-1]
+print(path(par, 'A', 'D'))                  # ['A', 'C', 'B', 'D']
+
+# A* на сетке с препятствиями, манхэттенская эвристика
+def astar(grid, start, goal):
+    R, C = len(grid), len(grid[0])
+    h = lambda p: abs(p[0]-goal[0]) + abs(p[1]-goal[1])
+    g = {start: 0}
+    pq = [(h(start), start)]
+    seen = set()
+    while pq:
+        f, cur = heapq.heappop(pq)
+        if cur == goal: return g[cur]
+        if cur in seen: continue
+        seen.add(cur)
+        for dr, dc in ((1,0), (-1,0), (0,1), (0,-1)):
+            nr, nc = cur[0]+dr, cur[1]+dc
+            if 0 &lt;= nr &lt; R and 0 &lt;= nc &lt; C and grid[nr][nc] == 0:
+                ng = g[cur] + 1
+                if ng &lt; g.get((nr, nc), float('inf')):
+                    g[(nr, nc)] = ng
+                    heapq.heappush(pq, (ng + h((nr, nc)), (nr, nc)))
+    return -1
+
+grid = [[0,0,0,0], [1,1,0,1], [0,0,0,0], [0,1,1,0]]
+print(astar(grid, (0,0), (3,3)))            # 6</code></pre>
+`});
+
+T.push({b:2,n:15,t:"Реляционная модель данных",
+s:"С. Д. Кузнецов. Базы данных",
+h:`
+<h3>Основные понятия</h3>
+<p>Модель предложена Э. Коддом (1970). Данные представляются в виде <b>отношений</b> — математически это подмножество декартова произведения доменов.</p>
+<table>
+<tr><th>Термин модели</th><th>Термин SQL</th><th>Смысл</th></tr>
+<tr><td>Отношение</td><td>таблица</td><td>множество кортежей одной схемы</td></tr>
+<tr><td>Кортеж</td><td>строка (запись)</td><td>один экземпляр сущности</td></tr>
+<tr><td>Атрибут</td><td>столбец (поле)</td><td>именованное свойство</td></tr>
+<tr><td>Домен</td><td>тип данных + ограничения</td><td>множество допустимых значений</td></tr>
+<tr><td>Кардинальность / степень</td><td>число строк / столбцов</td><td>размеры отношения</td></tr>
+</table>
+<p><b>Свойства отношения:</b> нет порядка строк и столбцов; нет дубликатов кортежей (есть первичный ключ); все значения атомарны (1НФ); значение может отсутствовать (NULL — «неизвестно», сравнение с ним даёт UNKNOWN, отсюда трёхзначная логика).</p>
+
+<h3>Ключи и целостность</h3>
+<ul>
+<li><b>Суперключ</b> — набор атрибутов, однозначно определяющий кортеж.</li>
+<li><b>Потенциальный (кандидат)</b> — минимальный суперключ.</li>
+<li><b>Первичный ключ (PRIMARY KEY)</b> — выбранный кандидат; уникален и NOT NULL. Естественный или суррогатный (автоинкремент, UUID).</li>
+<li><b>Внешний ключ (FOREIGN KEY)</b> — ссылка на первичный ключ другой таблицы.</li>
+</ul>
+<p><b>Ограничения целостности:</b> <i>целостность сущностей</i> — первичный ключ не NULL и уникален; <i>ссылочная целостность</i> — значение внешнего ключа существует в родительской таблице либо NULL; действия при удалении: CASCADE, SET NULL, RESTRICT, NO ACTION. Прочие ограничения: UNIQUE, CHECK, NOT NULL, DEFAULT.</p>
+
+<h3>Реляционная алгебра</h3>
+<p>Основа языка запросов и оптимизатора: <b>селекция</b> σ (WHERE), <b>проекция</b> π (SELECT списка столбцов), <b>переименование</b> ρ, <b>объединение</b> ∪, <b>разность</b> −, <b>декартово произведение</b> ×, <b>соединение</b> ⋈ (JOIN), <b>деление</b> ÷. Замкнутость: результат операции — снова отношение, поэтому запросы композируются.</p>
+
+<h3>Связи</h3>
+<p><b>1:1</b> — внешний ключ с UNIQUE; <b>1:M</b> — внешний ключ на стороне «многие»; <b>M:M</b> — через промежуточную (связующую) таблицу с составным первичным ключом.</p>
+
+<h3>Пример организации данных</h3>
+<pre><code>CREATE TABLE students (
+    id          SERIAL PRIMARY KEY,
+    full_name   VARCHAR(120) NOT NULL,
+    group_no    VARCHAR(10)  NOT NULL,
+    enrolled_at DATE         DEFAULT CURRENT_DATE
+);
+
+CREATE TABLE courses (
+    id      SERIAL PRIMARY KEY,
+    title   VARCHAR(120) NOT NULL UNIQUE,
+    credits SMALLINT     NOT NULL CHECK (credits BETWEEN 1 AND 10)
+);
+
+-- связь M:M реализуется отдельной таблицей
+CREATE TABLE enrollments (
+    student_id INT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    course_id  INT NOT NULL REFERENCES courses(id)  ON DELETE RESTRICT,
+    grade      SMALLINT CHECK (grade BETWEEN 2 AND 5),
+    PRIMARY KEY (student_id, course_id)     -- составной первичный ключ
+);
+
+INSERT INTO students (full_name, group_no) VALUES ('Иванов И. И.', 'M4150');
+INSERT INTO courses (title, credits)       VALUES ('Базы данных', 5);
+INSERT INTO enrollments VALUES (1, 1, 5);
+
+-- соединение: сигма, пи и join в терминах SQL
+SELECT s.full_name, c.title, e.grade
+FROM enrollments e
+JOIN students s ON s.id = e.student_id
+JOIN courses  c ON c.id = e.course_id
+WHERE e.grade &gt;= 4;</code></pre>
+`});
+
+T.push({b:2,n:16,t:"Транзакции в СУБД. ACID",
+s:"С. Д. Кузнецов. Базы данных",
+h:`
+<h3>Транзакция</h3>
+<div class="def"><b>Определение.</b> Транзакция — логически неделимая последовательность операций над данными, переводящая БД из одного согласованного состояния в другое. Завершается фиксацией (COMMIT) или откатом (ROLLBACK).</div>
+<p>Классический пример — перевод денег: списание и зачисление должны выполниться либо оба, либо ни одного.</p>
+
+<h3>Свойства ACID</h3>
+<table>
+<tr><th>Свойство</th><th>Смысл</th><th>Как обеспечивается</th></tr>
+<tr><td><b>A</b>tomicity (атомарность)</td><td>всё или ничего</td><td>журнал отмены (undo log), откат при сбое</td></tr>
+<tr><td><b>C</b>onsistency (согласованность)</td><td>сохраняются все ограничения целостности и бизнес-инварианты</td><td>ограничения, триггеры, каскады, корректность приложения</td></tr>
+<tr><td><b>I</b>solation (изолированность)</td><td>параллельные транзакции не видят промежуточных результатов друг друга</td><td>блокировки (2PL), MVCC, уровни изоляции</td></tr>
+<tr><td><b>D</b>urability (долговечность)</td><td>после COMMIT данные переживут сбой</td><td>журнал упреждающей записи WAL + fsync, контрольные точки, репликация</td></tr>
+</table>
+
+<h3>Аномалии параллельного выполнения</h3>
+<ul>
+<li><b>Потерянное обновление</b> — две транзакции пишут по одному и тому же прочитанному значению, одно изменение теряется.</li>
+<li><b>«Грязное» чтение (dirty read)</b> — чтение незафиксированных данных другой транзакции.</li>
+<li><b>Неповторяющееся чтение (non-repeatable read)</b> — повторное чтение той же строки даёт другое значение.</li>
+<li><b>Фантомы (phantom read)</b> — повторный запрос по условию возвращает новый набор строк.</li>
+</ul>
+
+<h3>Уровни изоляции (стандарт SQL)</h3>
+<table>
+<tr><th>Уровень</th><th>Грязное чтение</th><th>Неповторяющееся</th><th>Фантомы</th></tr>
+<tr><td>READ UNCOMMITTED</td><td>возможно</td><td>возможно</td><td>возможно</td></tr>
+<tr><td>READ COMMITTED (по умолчанию в PostgreSQL, Oracle)</td><td>нет</td><td>возможно</td><td>возможно</td></tr>
+<tr><td>REPEATABLE READ (по умолчанию в MySQL InnoDB)</td><td>нет</td><td>нет</td><td>возможно (в InnoDB и PostgreSQL — нет)</td></tr>
+<tr><td>SERIALIZABLE</td><td>нет</td><td>нет</td><td>нет</td></tr>
+</table>
+<p>Чем выше уровень, тем меньше параллелизм и пропускная способность. Выбор — компромисс между корректностью и производительностью.</p>
+
+<h3>Механизмы реализации</h3>
+<ul>
+<li><b>Блокировки:</b> разделяемые (S) для чтения и монопольные (X) для записи; двухфазный протокол 2PL (фаза захвата и фаза освобождения) гарантирует сериализуемость. Риск <b>взаимных блокировок (deadlock)</b> — обнаруживаются по графу ожидания и разрешаются откатом одной транзакции.</li>
+<li><b>MVCC</b> (PostgreSQL, Oracle, InnoDB): для каждой строки хранятся версии; читатели видят снимок данных и не блокируют писателей. Плата — рост объёма и необходимость очистки (VACUUM).</li>
+<li><b>WAL</b> (журнал упреждающей записи): изменение сначала попадает в журнал, потом в файлы данных; восстановление после сбоя — накат (redo) и откат (undo).</li>
+</ul>
+<div class="note"><b>Распределённые системы.</b> Для нескольких узлов используется двухфазная фиксация (2PC). Альтернатива ACID в распределённых NoSQL — <b>BASE</b> (Basically Available, Soft state, Eventual consistency) и теорема CAP: при сетевом разделении приходится выбирать между согласованностью и доступностью.</div>
+
+<h3>Код</h3>
+<pre><code>-- явная транзакция: перевод средств
+BEGIN;
+    UPDATE accounts SET balance = balance - 1000 WHERE id = 1;
+    UPDATE accounts SET balance = balance + 1000 WHERE id = 2;
+
+    SAVEPOINT sp1;                      -- точка сохранения
+    INSERT INTO audit_log(op) VALUES ('transfer');
+    -- ROLLBACK TO sp1;                 -- частичный откат
+COMMIT;                                 -- либо ROLLBACK при ошибке
+
+SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+
+-- пессимистическая блокировка строки
+BEGIN;
+    SELECT balance FROM accounts WHERE id = 1 FOR UPDATE;
+    UPDATE accounts SET balance = balance - 100 WHERE id = 1;
+COMMIT;</code></pre>
+<pre><code>import psycopg2
+
+conn = psycopg2.connect(dsn)
+conn.autocommit = False
+try:
+    with conn.cursor() as cur:
+        cur.execute("UPDATE accounts SET balance = balance - %s WHERE id = %s", (1000, 1))
+        cur.execute("UPDATE accounts SET balance = balance + %s WHERE id = %s", (1000, 2))
+    conn.commit()                       # атомарность обеспечена
+except Exception:
+    conn.rollback()                     # откат при любой ошибке
+    raise
+finally:
+    conn.close()</code></pre>
+`});
+
+T.push({b:2,n:17,t:"Нормализация баз данных",
+s:"С. Д. Кузнецов. Базы данных",
+h:`
+<h3>Зачем нужна нормализация</h3>
+<div class="def"><b>Нормализация</b> — процесс декомпозиции отношений с целью устранения избыточности и аномалий за счёт приведения к нормальным формам. Декомпозиция должна быть <b>без потерь</b> (соединение восстанавливает исходное отношение) и по возможности сохранять функциональные зависимости.</div>
+<p><b>Аномалии ненормализованной схемы:</b></p>
+<ul>
+<li><b>вставки</b> — нельзя добавить кафедру без сотрудника;</li>
+<li><b>обновления</b> — название отдела продублировано в 1000 строк, изменять нужно везде;</li>
+<li><b>удаления</b> — удалив последнего сотрудника, теряем сведения об отделе.</li>
+</ul>
+<p><b>Функциональная зависимость</b> X → Y: значение X однозначно определяет Y. Зависимость <i>полная</i> (не зависит от части составного ключа), <i>частичная</i>, <i>транзитивная</i> (X → Y → Z).</p>
+
+<h3>Нормальные формы</h3>
+<table>
+<tr><th>Форма</th><th>Требование</th><th>Что устраняет</th></tr>
+<tr><td><b>1НФ</b></td><td>все значения атомарны, нет повторяющихся групп и списков в ячейке, есть первичный ключ</td><td>многозначные ячейки</td></tr>
+<tr><td><b>2НФ</b></td><td>1НФ + каждый неключевой атрибут полностью зависит от <b>всего</b> первичного ключа</td><td>частичные зависимости (актуально только при составном ключе)</td></tr>
+<tr><td><b>3НФ</b></td><td>2НФ + нет транзитивных зависимостей неключевых атрибутов от ключа</td><td>зависимости неключевых атрибутов друг от друга</td></tr>
+<tr><td><b>НФБК</b> (Бойса — Кодда)</td><td>левая часть любой нетривиальной зависимости — суперключ</td><td>аномалии при пересекающихся кандидатах</td></tr>
+<tr><td><b>4НФ</b></td><td>НФБК + нет нетривиальных многозначных зависимостей</td><td>независимые многозначные факты в одной таблице</td></tr>
+<tr><td><b>5НФ</b></td><td>4НФ + любая зависимость соединения следует из потенциальных ключей</td><td>аномалии соединения</td></tr>
+</table>
+<p>На практике целевой уровень — <b>3НФ / НФБК</b>.</p>
+
+<h3>Пример</h3>
+<p><b>Исходная таблица (не в 1НФ):</b> <span class="kv">Заказы(id, клиент, телефоны, товары, отдел, глава_отдела)</span> — в «телефонах» и «товарах» списки.</p>
+<p><b>1НФ:</b> каждый товар — отдельная строка, телефоны вынесены; ключ (id_заказа, id_товара).</p>
+<p><b>2НФ:</b> название товара и цена зависят только от id_товара — части составного ключа. Выносим в отдельную таблицу <span class="kv">Товары(id, название, цена)</span>.</p>
+<p><b>3НФ:</b> глава отдела зависит от отдела, а отдел — от клиента: транзитивная зависимость. Выносим <span class="kv">Отделы(id, название, глава)</span>.</p>
+
+<div class="note"><b>Денормализация</b> — осознанное дублирование данных ради скорости чтения (предвычисленные агрегаты, «широкие» таблицы, материализованные представления). Цена — риск рассогласования и усложнение записи. Типична в OLAP-хранилищах (схема «звезда»), тогда как OLTP-системы обычно нормализованы.</div>
+
+<h3>Код</h3>
+<pre><code>-- ДО: одна таблица с избыточностью и аномалиями
+CREATE TABLE orders_bad (
+    order_id   INT,
+    client     VARCHAR(100),
+    dept       VARCHAR(50),
+    dept_head  VARCHAR(100),   -- транзитивно зависит от dept
+    product    VARCHAR(100),   -- зависит от части ключа
+    price      NUMERIC(10,2),
+    qty        INT
+);
+
+-- ПОСЛЕ: 3НФ
+CREATE TABLE departments (
+    id   SERIAL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL UNIQUE,
+    head VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE clients (
+    id      SERIAL PRIMARY KEY,
+    name    VARCHAR(100) NOT NULL,
+    dept_id INT NOT NULL REFERENCES departments(id)
+);
+
+CREATE TABLE products (
+    id    SERIAL PRIMARY KEY,
+    name  VARCHAR(100) NOT NULL,
+    price NUMERIC(10,2) NOT NULL CHECK (price &gt; 0)
+);
+
+CREATE TABLE orders (
+    id        SERIAL PRIMARY KEY,
+    client_id INT NOT NULL REFERENCES clients(id),
+    created   TIMESTAMP DEFAULT now()
+);
+
+CREATE TABLE order_items (
+    order_id   INT REFERENCES orders(id) ON DELETE CASCADE,
+    product_id INT REFERENCES products(id),
+    qty        INT NOT NULL CHECK (qty &gt; 0),
+    PRIMARY KEY (order_id, product_id)
+);
+
+-- цена меняется в одном месте, дублирования нет
+SELECT o.id, c.name, p.name, i.qty, i.qty * p.price AS total
+FROM orders o
+JOIN clients     c ON c.id = o.client_id
+JOIN order_items i ON i.order_id = o.id
+JOIN products    p ON p.id = i.product_id;</code></pre>
+`});
+
+T.push({b:2,n:18,t:"Основные команды языка SQL",
+s:"С. Д. Кузнецов. Базы данных",
+h:`
+<h3>Группы команд</h3>
+<table>
+<tr><th>Группа</th><th>Команды</th><th>Назначение</th></tr>
+<tr><td><b>DDL</b></td><td>CREATE, ALTER, DROP, TRUNCATE</td><td>определение структуры</td></tr>
+<tr><td><b>DML</b></td><td>INSERT, UPDATE, DELETE, MERGE</td><td>изменение данных</td></tr>
+<tr><td><b>DQL</b></td><td>SELECT</td><td>выборка данных</td></tr>
+<tr><td><b>DCL</b></td><td>GRANT, REVOKE</td><td>права доступа</td></tr>
+<tr><td><b>TCL</b></td><td>COMMIT, ROLLBACK, SAVEPOINT</td><td>управление транзакциями</td></tr>
+</table>
+
+<h3>Логический порядок выполнения SELECT</h3>
+<div class="f">FROM → JOIN → WHERE → GROUP BY → HAVING → SELECT → DISTINCT → ORDER BY → LIMIT</div>
+<p>Отсюда: в WHERE нельзя использовать псевдонимы из SELECT и агрегаты (для агрегатов есть HAVING), а в ORDER BY псевдонимы уже доступны.</p>
+
+<h3>Виды соединений</h3>
+<ul>
+<li><b>INNER JOIN</b> — только совпавшие строки.</li>
+<li><b>LEFT / RIGHT JOIN</b> — все строки левой/правой таблицы, несовпадения заполняются NULL.</li>
+<li><b>FULL OUTER JOIN</b> — объединение обоих вариантов.</li>
+<li><b>CROSS JOIN</b> — декартово произведение. <b>SELF JOIN</b> — соединение таблицы с собой (иерархии).</li>
+</ul>
+
+<h3>Код: полный набор конструкций</h3>
+<pre><code>-- DDL
+CREATE TABLE emp (
+    id       SERIAL PRIMARY KEY,
+    name     VARCHAR(100) NOT NULL,
+    dept_id  INT REFERENCES dept(id),
+    salary   NUMERIC(10,2) CHECK (salary &gt; 0),
+    hired_at DATE DEFAULT CURRENT_DATE
+);
+ALTER TABLE emp ADD COLUMN email VARCHAR(120) UNIQUE;
+ALTER TABLE emp ALTER COLUMN salary SET NOT NULL;
+DROP TABLE IF EXISTS tmp;
+
+-- DML
+INSERT INTO emp (name, dept_id, salary) VALUES ('Иванов', 1, 150000);
+INSERT INTO emp (name, dept_id, salary)
+SELECT name, dept_id, salary FROM emp_staging;         -- вставка из выборки
+
+UPDATE emp SET salary = salary * 1.1 WHERE dept_id = 1;
+DELETE FROM emp WHERE hired_at &lt; '2015-01-01';
+
+-- DQL: фильтрация, агрегация, сортировка
+SELECT dept_id,
+       COUNT(*)              AS cnt,
+       ROUND(AVG(salary), 2) AS avg_salary,
+       MAX(salary)           AS max_salary
+FROM emp
+WHERE salary &gt; 50000 AND name LIKE 'И%' AND email IS NOT NULL
+GROUP BY dept_id
+HAVING COUNT(*) &gt; 2
+ORDER BY avg_salary DESC
+LIMIT 10 OFFSET 0;
+
+-- соединения
+SELECT e.name, d.title
+FROM emp e
+LEFT JOIN dept d ON d.id = e.dept_id;
+
+-- подзапросы
+SELECT name FROM emp
+WHERE salary &gt; (SELECT AVG(salary) FROM emp);          -- скалярный
+
+SELECT name FROM emp e
+WHERE EXISTS (SELECT 1 FROM proj p WHERE p.emp_id = e.id);   -- коррелированный
+
+SELECT name FROM emp WHERE dept_id IN (SELECT id FROM dept WHERE city = 'СПб');
+
+-- CTE и оконные функции
+WITH dept_avg AS (
+    SELECT dept_id, AVG(salary) AS a FROM emp GROUP BY dept_id
+)
+SELECT e.name, e.salary, d.a,
+       RANK()       OVER (PARTITION BY e.dept_id ORDER BY e.salary DESC) AS rnk,
+       SUM(e.salary) OVER (PARTITION BY e.dept_id)                       AS fund,
+       LAG(e.salary) OVER (ORDER BY e.hired_at)                          AS prev
+FROM emp e
+JOIN dept_avg d ON d.dept_id = e.dept_id
+WHERE e.salary &gt; d.a;
+
+-- CASE, COALESCE, работа с NULL
+SELECT name,
+       CASE WHEN salary &gt; 200000 THEN 'высокая'
+            WHEN salary &gt; 100000 THEN 'средняя'
+            ELSE 'базовая' END AS grade,
+       COALESCE(email, 'не указан') AS email
+FROM emp;
+
+-- множественные операции
+SELECT id FROM emp UNION     SELECT id FROM archive;    -- без дубликатов
+SELECT id FROM emp UNION ALL SELECT id FROM archive;    -- быстрее, с дубликатами
+SELECT id FROM emp INTERSECT SELECT id FROM archive;
+SELECT id FROM emp EXCEPT    SELECT id FROM archive;
+
+-- представление, DCL
+CREATE VIEW v_top AS SELECT name, salary FROM emp WHERE salary &gt; 200000;
+GRANT SELECT ON v_top TO analyst;</code></pre>
+<div class="note"><b>Частые ошибки.</b> Сравнение с NULL через <code>= NULL</code> вместо <code>IS NULL</code>; COUNT(col) не считает NULL, а COUNT(*) считает все строки; смешивание агрегатов и обычных колонок без GROUP BY; DELETE без WHERE; конкатенация SQL-строк вместо параметров (SQL-инъекция).</div>
+`});
+
+T.push({b:2,n:19,t:"Оптимизация запросов. Индексирование",
+s:"С. Д. Кузнецов. Базы данных",
+h:`
+<h3>Как СУБД выполняет запрос</h3>
+<p>Разбор (parser) → семантический анализ → <b>переписывание</b> (rewriter: раскрытие представлений, упрощение предикатов) → <b>планировщик/оптимизатор</b> → исполнитель. Оптимизатор <b>стоимостной</b>: перебирает планы и оценивает стоимость по статистике (число строк, гистограммы распределения, селективность, доля различных значений). Устаревшая статистика — частая причина плохих планов (<code>ANALYZE</code>).</p>
+<p><b>Способы доступа:</b> последовательное сканирование (Seq Scan), сканирование по индексу (Index Scan), только по индексу (Index Only Scan), по битовой карте (Bitmap Scan). <b>Алгоритмы соединения:</b> Nested Loop (хорош при малой внешней выборке и индексе на внутренней), Hash Join (большие несортированные наборы, равенство), Merge Join (отсортированные входы, диапазоны).</p>
+
+<h3>Индексы</h3>
+<div class="def"><b>Индекс</b> — вспомогательная структура, ускоряющая поиск строк по значению столбцов ценой дополнительной памяти и замедления INSERT/UPDATE/DELETE.</div>
+<table>
+<tr><th>Тип</th><th>Структура</th><th>Что ускоряет</th></tr>
+<tr><td>B-tree (по умолчанию)</td><td>сбалансированное дерево</td><td>=, &lt;, &gt;, BETWEEN, сортировка, префикс LIKE 'abc%'</td></tr>
+<tr><td>Hash</td><td>хеш-таблица</td><td>только равенство</td></tr>
+<tr><td>GIN</td><td>инвертированный индекс</td><td>полнотекстовый поиск, JSONB, массивы</td></tr>
+<tr><td>GiST / SP-GiST</td><td>обобщённое дерево</td><td>геоданные, диапазоны, поиск ближайших</td></tr>
+<tr><td>BRIN</td><td>диапазоны блоков</td><td>очень большие таблицы с естественным порядком (даты)</td></tr>
+</table>
+<p><b>Виды по назначению:</b> уникальный, составной (важен <b>порядок столбцов</b>: индекс (a,b) работает для условий по a и по a+b, но не по одному b), частичный (WHERE-условие в определении), покрывающий (INCLUDE — все нужные колонки в индексе, возможен Index Only Scan), функциональный (по выражению, например LOWER(email)), кластерный (определяет физический порядок строк).</p>
+
+<h3>Когда индекс не используется</h3>
+<ul>
+<li>Функция или арифметика над колонкой: <code>WHERE YEAR(dt) = 2024</code> — нужен индекс по выражению или переписывание в диапазон <code>dt &gt;= '2024-01-01' AND dt &lt; '2025-01-01'</code>.</li>
+<li>Неявное приведение типов; <code>LIKE '%abc'</code> (лидирующий шаблон); <code>OR</code> по разным колонкам без bitmap-плана.</li>
+<li>Низкая селективность: если выбирается значительная доля таблицы, последовательное сканирование дешевле.</li>
+<li>Индексов слишком много: каждый замедляет запись и раздувает объём.</li>
+</ul>
+
+<h3>Приёмы оптимизации</h3>
+<ul>
+<li>Читать <b>план выполнения</b>: <code>EXPLAIN (ANALYZE, BUFFERS)</code> — сравнивать оценочные и фактические строки; расхождение указывает на проблему со статистикой.</li>
+<li>Выбирать только нужные столбцы, не <code>SELECT *</code>; фильтровать как можно раньше.</li>
+<li>Избегать проблемы N+1 запросов — заменять на один JOIN или batch-запрос.</li>
+<li>Пагинация по ключу (keyset: <code>WHERE id &gt; :last</code>) вместо больших OFFSET.</li>
+<li>Материализованные представления и предагрегация для тяжёлой аналитики; партиционирование больших таблиц; денормализация точечно.</li>
+<li>Пул соединений, подготовленные запросы, пакетная вставка (COPY / batch insert).</li>
+</ul>
+
+<h3>Код</h3>
+<pre><code>-- анализ плана
+EXPLAIN (ANALYZE, BUFFERS)
+SELECT * FROM emp WHERE dept_id = 5 AND salary &gt; 100000;
+
+-- индексы
+CREATE INDEX idx_emp_dept        ON emp (dept_id);
+CREATE INDEX idx_emp_dept_salary ON emp (dept_id, salary DESC);   -- составной
+CREATE UNIQUE INDEX idx_emp_email ON emp (email);
+CREATE INDEX idx_emp_active      ON emp (dept_id) WHERE fired_at IS NULL;  -- частичный
+CREATE INDEX idx_emp_lower_email ON emp (LOWER(email));                    -- по выражению
+CREATE INDEX idx_emp_cover       ON emp (dept_id) INCLUDE (name, salary);  -- покрывающий
+
+ANALYZE emp;                       -- обновить статистику
+REINDEX TABLE emp;
+
+-- плохо: функция над колонкой блокирует индекс
+SELECT * FROM emp WHERE EXTRACT(YEAR FROM hired_at) = 2024;
+-- хорошо: диапазон, индекс по hired_at работает
+SELECT * FROM emp WHERE hired_at &gt;= '2024-01-01' AND hired_at &lt; '2025-01-01';
+
+-- плохо: большой OFFSET читает и отбрасывает строки
+SELECT * FROM emp ORDER BY id LIMIT 20 OFFSET 100000;
+-- хорошо: пагинация по ключу
+SELECT * FROM emp WHERE id &gt; 100000 ORDER BY id LIMIT 20;
+
+-- поиск неиспользуемых индексов (PostgreSQL)
+SELECT relname, indexrelname, idx_scan
+FROM pg_stat_user_indexes
+WHERE idx_scan = 0
+ORDER BY relname;</code></pre>
+`});
+
+/* ==================== ЛОГИКА ИНТЕРФЕЙСА ==================== */
+
+const state = { block: 1, key: null, done: new Set(), q: "" };
+const keyOf = t => t.b + "." + t.n;
+const $ = s => document.querySelector(s);
+
+function visible(){
+  const q = state.q.trim().toLowerCase();
+  if (!q) return T.filter(t => t.b === state.block);
+  return T.filter(t => (t.t + " " + t.s + " " + t.h).toLowerCase().includes(q));
+}
+
+function renderList(){
+  const items = visible();
+  $("#navcount").textContent = items.length + " / " + T.filter(t => t.b === state.block).length;
+  $("#navtitle").textContent = state.q.trim()
+    ? "Найдено по всем блокам"
+    : (state.block === 1 ? "Блок 1 · Математика" : "Блок 2 · ИТ");
+
+  const list = $("#list");
+  list.innerHTML = "";
+  items.forEach(t => {
+    const b = document.createElement("button");
+    b.className = "tk" + (state.done.has(keyOf(t)) ? " done" : "");
+    b.setAttribute("aria-current", keyOf(t) === state.key ? "true" : "false");
+    b.innerHTML = '<span class="num"><span>' + t.n + '</span></span><span class="lbl">' + t.t + '</span>';
+    b.title = "Билет " + t.n + ". " + t.t;
+    b.onclick = () => { open(keyOf(t)); };
+    list.appendChild(b);
+  });
+  if (!items.length) list.innerHTML = '<div class="empty">Ничего не найдено</div>';
+}
+
+function renderArticle(){
+  const t = T.find(x => keyOf(x) === state.key);
+  const main = $("#main");
+  if (!t){ main.innerHTML = '<div class="empty">Выберите билет слева</div>'; return; }
+  const isDone = state.done.has(state.key);
+  main.innerHTML =
+    '<article>' +
+      '<div class="stamp"><b>' + t.n + '</b><i>БИЛЕТ</i></div>' +
+      '<p class="eyebrow">' + (t.b === 1 ? "Блок 1 · Математика" : "Блок 2 · Информационные технологии") + ' · Билет ' + t.n + '</p>' +
+      '<h1>' + t.t + '</h1>' +
+      '<p class="src">Источник: ' + t.s + '</p>' +
+      t.h +
+      '<div class="foot">' +
+        '<button id="prev">← Предыдущий</button>' +
+        '<button id="next">Следующий →</button>' +
+        '<button class="mark' + (isDone ? ' on' : '') + '" id="mark">' +
+          (isDone ? '✓ Выучено' : 'Отметить выученным') + '</button>' +
+      '</div>' +
+    '</article>';
+  $("#mark").onclick = () => {
+    state.done.has(state.key) ? state.done.delete(state.key) : state.done.add(state.key);
+    renderList(); renderArticle(); updateProgress();
+  };
+  $("#prev").onclick = () => step(-1);
+  $("#next").onclick = () => step(1);
+}
+
+function step(d){
+  const items = visible();
+  const i = items.findIndex(x => keyOf(x) === state.key);
+  const j = Math.min(items.length - 1, Math.max(0, i + d));
+  if (items[j]) open(keyOf(items[j]));
+}
+
+function open(k){
+  state.key = k;
+  const t = T.find(x => keyOf(x) === k);
+  if (t && !state.q.trim()) state.block = t.b;
+  renderList(); renderArticle();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function updateProgress(){
+  $("#pbar").style.width = (100 * state.done.size / T.length) + "%";
+}
+
+function selectBlock(n){
+  state.block = n;
+  $("#b1").setAttribute("aria-selected", n === 1 ? "true" : "false");
+  $("#b2").setAttribute("aria-selected", n === 2 ? "true" : "false");
+  const first = T.find(t => t.b === n);
+  state.key = keyOf(first);
+  renderList(); renderArticle();
+}
+
+$("#b1").onclick = () => selectBlock(1);
+$("#b2").onclick = () => selectBlock(2);
+$("#q").oninput = e => { state.q = e.target.value; renderList(); };
+$("#print").onclick = () => window.print();
+$("#theme").onclick = () => {
+  const cur = document.documentElement.getAttribute("data-theme");
+  document.documentElement.setAttribute("data-theme", cur === "dark" ? "light" : "dark");
+};
+document.addEventListener("keydown", e => {
+  if (e.target.tagName === "INPUT") return;
+  if (e.key === "ArrowRight" || e.key === "j") step(1);
+  if (e.key === "ArrowLeft"  || e.key === "k") step(-1);
+  if (e.key === "/") { e.preventDefault(); $("#q").focus(); }
+});
+
+selectBlock(1);
+updateProgress();
+</script>
+</body>
+</html>
